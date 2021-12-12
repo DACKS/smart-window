@@ -2,6 +2,11 @@ import os
 from . import db
 from . import auth
 from . import window
+from . import interval
+from . import notification
+from . import notificationType
+from . import statistics
+
 from flask import Flask
 
 
@@ -30,6 +35,10 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(window.bp)
+    app.register_blueprint(interval.bp)
+    app.register_blueprint(notification.bp)
+    app.register_blueprint(notificationType.bp)
+    app.register_blueprint(statistics.bp)
     app.add_url_rule('/', endpoint='index')
 
     # a simple page that says hello

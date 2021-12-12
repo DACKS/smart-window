@@ -52,11 +52,11 @@ CREATE TABLE notificationType (
 CREATE TABLE swStatistics (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   windowID INTEGER NOT NULL,
-  is_exterior boolean,
-  min_temperature FLOAT(2),
-  max_temperature FLOAT(2),
+  isExterior boolean,
+  minTemperature FLOAT(2),
+  maxTemperature FLOAT(2),
   humidity FLOAT(2),
   pressure FLOAT(2),
   createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  OREIGN KEY (windowID) REFERENCES swindow(id)
+  FOREIGN KEY (windowID) REFERENCES swindow(id)
 );

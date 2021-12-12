@@ -18,7 +18,7 @@ def index():
         ' FROM swindow w JOIN user u ON w.userID = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('window/index.html', windows=windows)
+    return render_template('swindow/index.html', windows=windows)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -47,9 +47,9 @@ def create():
                 (name, openDirection, openAngle, integrity, g.user['id'])
             )
             my_db.commit()
-            return redirect(url_for('window.index'))
+            return redirect(url_for('swindow.index'))
 
-    return render_template('window/create.html')
+    return render_template('swindow/create.html')
 
 
 def get_window(id, check_user=True):
@@ -106,9 +106,9 @@ def update(id):
                 (name, id)
             )
             my_db.commit()
-            return redirect(url_for('window.index'))
+            return redirect(url_for('swindow.index'))
 
-    return render_template('window/update.html', window=window)
+    return render_template('swindow/update.html', window=window)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -117,4 +117,4 @@ def delete(id):
     my_db = db.get_db()
     my_db.execute('DELETE FROM swindow WHERE id = ?', (id,))
     my_db.commit()
-    return redirect(url_for('window.index'))
+    return redirect(url_for('swindow.index'))
