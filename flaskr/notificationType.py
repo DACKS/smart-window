@@ -16,7 +16,7 @@ def index():
     notificationTypes = my_db.execute(
         'SELECT *'
         ' FROM notificationType'
-        ' ORDER BY created DESC'
+        ' ORDER BY createdAt DESC'
     ).fetchall()
     return render_template('notificationType/index.html', notificationTypes=notificationTypes)
 

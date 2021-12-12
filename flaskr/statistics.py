@@ -13,15 +13,15 @@ bp = Blueprint('statistics', __name__)
 @bp.route('/')
 def index():
     my_db = db.get_db()
-    statistics = my_db.execute(
+    statisticsList = my_db.execute(
         'SELECT *'
         ' FROM swStatistics ss JOIN ('
         ' 	SELECT sw.id AS windowID, u.id AS userID'
         '	FROM swindow sw JOIN user u ON sw.userID = u.id'
         ' ) w ON ss.windowID = w.windowID'
-        ' ORDER BY created DESC'
+        ' ORDER BY ss.createdAt DESC'
     ).fetchall()
-    return render_template('swStatistics/index.html', statistics=statistics)
+    return render_template('statistics/index.html', statisticsList=statisticsList)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -57,9 +57,9 @@ def create():
                 (g.swindow['id'], isExterior, minTemperature, maxTemperature, humidity, pressure)
             )
             my_db.commit()
-            return redirect(url_for('swStatistics.index'))
+            return redirect(url_for('statistics.index'))
 
-    return render_template('swStatistics/create.html')
+    return render_template('statistics/create.html')
 
 
 def get_statistics(id, check_user=True):
@@ -122,9 +122,9 @@ def update(id):
                 (isExterior, minTemperature, maxTemperature, humidity, pressure, id)
             )
             my_db.commit()
-            return redirect(url_for('swStatistics.index'))
+            return redirect(url_for('statistics.index'))
 
-    return render_template('swStatistics/update.html', statistics=statistics)
+    return render_template('statistics/update.html', statistics=statistics)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -133,4 +133,4 @@ def delete(id):
     my_db = db.get_db()
     my_db.execute('DELETE FROM swStatistics WHERE id = ?', (id,))
     my_db.commit()
-    return redirect(url_for('swStatistics.index'))
+    return redirect(url_for('statistics.index'))

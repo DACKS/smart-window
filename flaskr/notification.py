@@ -19,9 +19,9 @@ def index():
         ' 	SELECT sw.id AS windowID, sw.userID'
         '	FROM swindow sw JOIN user u ON sw.userID = u.id'
         ' ) w ON n.windowID = w.windowID'
-        ' ORDER BY created DESC'
+        ' ORDER BY n.createdAt DESC'
     ).fetchall()
-    return render_template('swNotification/index.html', notifications=notifications)
+    return render_template('notification/index.html', notifications=notifications)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -44,9 +44,9 @@ def create():
                 (content, g.swindow['id'])
             )
             my_db.commit()
-            return redirect(url_for('swNotification.index'))
+            return redirect(url_for('notification.index'))
 
-    return render_template('swNotification/create.html')
+    return render_template('notification/create.html')
 
 
 def get_notification(id, check_user=True):
@@ -95,9 +95,9 @@ def update(id):
                 (name, iStart, iEnd, luminosity, id)
             )
             my_db.commit()
-            return redirect(url_for('swNotification.index'))
+            return redirect(url_for('notification.index'))
 
-    return render_template('swNotification/update.html', notification=notification)
+    return render_template('notification/update.html', notification=notification)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -106,4 +106,4 @@ def delete(id):
     my_db = db.get_db()
     my_db.execute('DELETE FROM swNotification WHERE id = ?', (id,))
     my_db.commit()
-    return redirect(url_for('swNotification.index'))
+    return redirect(url_for('notification.index'))

@@ -19,7 +19,7 @@ def index():
         ' 	SELECT sw.id AS windowID'
         '	FROM swindow sw JOIN user u ON sw.userID = u.id'
         ' ) w ON i.windowID = w.windowID'
-        ' ORDER BY created DESC'
+        ' ORDER BY i.createdAt DESC'
     ).fetchall()
     return render_template('interval/index.html', intervals=intervals)
 

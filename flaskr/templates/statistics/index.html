@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Windows{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('statistics.create') }}">New statistics</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for statistics in statisticsList %}
+    <article class="post">
+      <header>
+        <h1>{{ statistics['name'] }}</h1>
+        <a class="action" href="{{ url_for('statistics.update', id=statistics['id']) }}">Edit</a>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
