@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/daniel/Documents/Anul3/SoftwareEngineeering/smart-window/server/venv"
+set -gx VIRTUAL_ENV "F:/facultate/facultate-licenta/facultate - anul 3/semestrul 1/Iginerie Software/proiect/smart-window/flaskr/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

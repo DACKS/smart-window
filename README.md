@@ -35,6 +35,8 @@ CMD: set ```FLASK_ENV=development```
 
 PowerShell: ```$env:FLASK_ENV = "development"```
 
+```export FLASK_APP="flaskr"```
+```export FLASK_ENV=development```
 
 Initialize (or reinitialize) database:
 ```flask init-db```
