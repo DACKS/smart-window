@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Windows{% endblock %}</h1>
+  <h1>{% block title %}Intervals{% endblock %}</h1>
   {% if g.user %}
     <a class="action" href="{{ url_for('interval.create') }}">New interval</a>
   {% endif %}
@@ -12,6 +12,13 @@
     <article class="post">
       <header>
         <h1>{{ interval['name'] }}</h1>
+        <hr>
+        <p>interval: {{ interval['iStart']}} - {{interval['iEnd'] }}</p> 
+        <hr>
+        <p>luminosity: {{ interval['luminosity'] }}</p>
+        <hr>
+        <p>createdAt: {{ interval['createdAt'] }}</p>
+        <hr>
         <a class="action" href="{{ url_for('interval.update', id=interval['id']) }}">Edit</a>
       </header>
     </article>

@@ -8,6 +8,16 @@
   <form method="post">
     <label for="name">Name</label>
     <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    
+    <label for="iStart">start: </label>
+    <input type="date" name="iStart" id="iStart" value="{{ request.form['iStart'] }}" required>
+    
+    <label for="iEnd">end: </label>
+    <input type="date" name="iEnd" id="iEnd" value="{{ request.form['iEnd'] }}" required>
+
+    <label for="luminosity">luminosity: </label>
+    <input type="number" name="luminosity" step="0.01" id="luminosity" value="{{ request.form['luminosity'] }}">
+
     <input type="submit" value="Save">
   </form>
 {% endblock %}

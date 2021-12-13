@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit "{{ notificationType['name'] }}"{% endblock %}</h1>
+  <h1>{% block title %}Edit "{{ notificationType['description'] }}"{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
   <form method="post">
-    <label for="name">Name</label>
-    <input name="name" id="name"
-      value="{{ request.form['name'] or notificationType['name'] }}" required>
+    <label for="description">Description</label>
+    <input name="description" id="description"
+      value="{{ request.form['description'] or notificationType['description'] }}" required>
       <input type="submit" value="Save">
     </form>
   <hr>

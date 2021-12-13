@@ -13,13 +13,18 @@ bp = Blueprint('interval', __name__)
 @bp.route('/')
 def index():
     my_db = db.get_db()
+    # intervals = my_db.execute(
+    #     'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity'
+    #     ' FROM interval i JOIN ('
+    #     ' 	SELECT sw.id AS windowID'
+    #     '	FROM swindow sw JOIN user u ON sw.userID = u.id'
+    #     ' ) w ON i.windowID = w.windowID'
+    #     ' ORDER BY i.createdAt DESC'
+    # ).fetchall()
     intervals = my_db.execute(
-        'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity'
-        ' FROM interval i JOIN ('
-        ' 	SELECT sw.id AS windowID'
-        '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-        ' ) w ON i.windowID = w.windowID'
-        ' ORDER BY i.createdAt DESC'
+        'SELECT *'
+        ' FROM interval'
+        ' ORDER BY createdAt DESC'
     ).fetchall()
     return render_template('interval/index.html', intervals=intervals)
 
@@ -28,11 +33,13 @@ def index():
 @auth.login_required
 def create():
     if request.method == 'POST':
-        name = request.form['name']
         error = None
+        name = request.form['name']
 
-        iStart = request.form['iStart']        
+        iStart = request.form['iStart']
+
         iEnd = request.form['iEnd']
+
         if not iStart or not iEnd:
             error = 'interval field missing'
 
@@ -45,7 +52,7 @@ def create():
             my_db.execute(
                 'INSERT INTO interval (name, windowID, iStart, iEnd, luminosity)'
                 ' VALUES (?, ?, ?, ?, ?)',
-                (name, g.swindow['id'], iStart, iEnd, luminosity)
+                (name, 1, iStart, iEnd, luminosity)
             )
             my_db.commit()
             return redirect(url_for('interval.index'))
@@ -54,12 +61,19 @@ def create():
 
 
 def get_interval(id, check_user=True):
+    # interval = db.get_db().execute(
+    #     'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity, w.windowID, w.userID'
+    #     ' FROM interval i JOIN ('
+    #     ' 	SELECT sw.id AS windowID, u.id AS userID'
+    #     '	FROM swindow sw JOIN user u ON sw.userID = u.id'
+    #     ' ) w ON i.windowID = w.windowID'
+    #     ' WHERE id = ?',
+    #     (id,)
+    # ).fetchone()
+
     interval = db.get_db().execute(
-        'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity, w.windowID, w.userID'
-        ' FROM interval i JOIN ('
-        ' 	SELECT sw.id AS windowID, u.id AS userID'
-        '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-        ' ) w ON i.windowID = w.windowID'
+        'SELECT *'
+        ' FROM interval'
         ' WHERE id = ?',
         (id,)
     ).fetchone()
@@ -67,8 +81,8 @@ def get_interval(id, check_user=True):
     if interval is None:
         abort(404, f"Interval id {id} doesn't exist.")
 
-    if check_user and interval['userID'] != g.user['id']:
-        abort(403)
+    # if check_user and interval['userID'] != g.user['id']:
+    #     abort(403)
 
     return interval
 

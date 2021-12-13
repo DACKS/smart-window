@@ -25,7 +25,7 @@ def index():
 @auth.login_required
 def create():
     if request.method == 'POST':
-        description = request.form['name']
+        description = request.form['description']
         error = None
 
         if not description:
@@ -38,7 +38,7 @@ def create():
             my_db.execute(
                 'INSERT INTO notificationType (description)'
                 ' VALUES (?)',
-                (description)
+                (description,)
             )
             my_db.commit()
             return redirect(url_for('notificationType.index'))
@@ -46,7 +46,7 @@ def create():
     return render_template('notificationType/create.html')
 
 
-def get_notificationType(id, check_user=True):
+def get_notificationType(id):
     notificationType = db.get_db().execute(
         'SELECT *'
         ' FROM notificationType'
@@ -57,9 +57,6 @@ def get_notificationType(id, check_user=True):
     if notificationType is None:
         abort(404, f"NotificationType id {id} doesn't exist.")
 
-    if check_user and notificationType['userID'] != g.user['id']:
-        abort(403)
-
     return notificationType
 
 
@@ -69,7 +66,7 @@ def update(id):
     notificationType = get_notificationType(id)
 
     if request.method == 'POST':
-        description = request.form['name']
+        description = request.form['description']
         error = None
 
         if not description:
