@@ -35,10 +35,10 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(interval.bp)
-    # app.register_blueprint(window.bp)
-    # app.register_blueprint(notification.bp)
-    # app.register_blueprint(notificationType.bp)
-    # app.register_blueprint(statistics.bp)
+    app.register_blueprint(window.bp)
+    app.register_blueprint(notification.bp)
+    app.register_blueprint(notificationType.bp)
+    app.register_blueprint(statistics.bp)
 
     app.add_url_rule('/', endpoint='index')
 

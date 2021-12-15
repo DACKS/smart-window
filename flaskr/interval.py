@@ -10,7 +10,7 @@ from . import auth
 
 bp = Blueprint('interval', __name__)
 
-@bp.route('/')
+@bp.route('/intervals/')
 def index():
     my_db = db.get_db()
     # intervals = my_db.execute(
@@ -29,7 +29,7 @@ def index():
     return render_template('interval/index.html', intervals=intervals)
 
 
-@bp.route('/create', methods=('GET', 'POST'))
+@bp.route('/interval/create', methods=('GET', 'POST'))
 @auth.login_required
 def create():
     if request.method == 'POST':
@@ -37,8 +37,10 @@ def create():
         name = request.form['name']
 
         iStart = request.form['iStart']
+        iStart = iStart.replace('T', ' ') + ':00'
 
         iEnd = request.form['iEnd']
+        iEnd = iEnd.replace('T', ' ') + ':00'
 
         if not iStart or not iEnd:
             error = 'interval field missing'
@@ -87,7 +89,7 @@ def get_interval(id, check_user=True):
     return interval
 
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/interval/<int:id>/update', methods=('GET', 'POST'))
 @auth.login_required
 def update(id):
     interval = get_interval(id)
@@ -122,7 +124,7 @@ def update(id):
     return render_template('interval/update.html', interval=interval)
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/interval/<int:id>/delete', methods=('POST',))
 @auth.login_required
 def delete(id):
     my_db = db.get_db()

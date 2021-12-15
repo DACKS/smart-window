@@ -1,5 +1,4 @@
 flaskr/lib
-flaskr/venv/lib
-flaskr/venv/pyvenv.cfg
-flaskr/venv/bin/activate.csh
-flaskr/venv/bin/activate.fish
+flaskr/bin
+flaskr/venv/
+instance
