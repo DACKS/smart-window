@@ -27,13 +27,26 @@ source venv/bin/activate
 ```
 
 Windows:
-```.venv\Scripts\activate.bat```
+
+Activate:
+
+CMD: ```./venv/Scripts/activate.bat```
+
+PowerShell: ```./venv/Scripts/Activate.ps1```
+
+```
+cd ../
+```
 
 Set environment value for development: export ```FLASK_ENV=development```
 
 CMD: set ```FLASK_ENV=development```
 
-PowerShell: ```$env:FLASK_ENV = "development"```
+PowerShell: 
+```
+$env:FLASK_APP = "flaskr/__init__.py"
+$env:FLASK_ENV = "development"
+```
 
 
 Initialize (or reinitialize) database:
