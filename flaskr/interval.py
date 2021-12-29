@@ -13,14 +13,6 @@ bp = Blueprint('interval', __name__)
 @bp.route('/intervals/')
 def index():
     my_db = db.get_db()
-    # intervals = my_db.execute(
-    #     'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity'
-    #     ' FROM interval i JOIN ('
-    #     ' 	SELECT sw.id AS windowID'
-    #     '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-    #     ' ) w ON i.windowID = w.windowID'
-    #     ' ORDER BY i.createdAt DESC'
-    # ).fetchall()
     intervals = my_db.execute(
         'SELECT *'
         ' FROM interval'
@@ -52,9 +44,9 @@ def create():
         else:
             my_db = db.get_db()
             my_db.execute(
-                'INSERT INTO interval (name, windowID, iStart, iEnd, luminosity)'
-                ' VALUES (?, ?, ?, ?, ?)',
-                (name, 1, iStart, iEnd, luminosity)
+                'INSERT INTO interval (name, iStart, iEnd, luminosity)'
+                ' VALUES (?, ?, ?, ?)',
+                (name, iStart, iEnd, luminosity)
             )
             my_db.commit()
             return redirect(url_for('interval.index'))
@@ -63,16 +55,6 @@ def create():
 
 
 def get_interval(id, check_user=True):
-    # interval = db.get_db().execute(
-    #     'SELECT i.id, i.name, i.iStart, i.iEnd, i.luminosity, w.windowID, w.userID'
-    #     ' FROM interval i JOIN ('
-    #     ' 	SELECT sw.id AS windowID, u.id AS userID'
-    #     '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-    #     ' ) w ON i.windowID = w.windowID'
-    #     ' WHERE id = ?',
-    #     (id,)
-    # ).fetchone()
-
     interval = db.get_db().execute(
         'SELECT *'
         ' FROM interval'

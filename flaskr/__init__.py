@@ -1,7 +1,7 @@
 import os
 from . import db
 from . import auth
-from . import window
+from . import userRole
 from . import interval
 from . import notification
 from . import notificationType
@@ -35,7 +35,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(interval.bp)
-    app.register_blueprint(window.bp)
+    app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(notificationType.bp)
     app.register_blueprint(statistics.bp)

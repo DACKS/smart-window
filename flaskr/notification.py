@@ -15,11 +15,8 @@ def index():
     my_db = db.get_db()
     notifications = my_db.execute(
         'SELECT *'
-        ' FROM swNotification n JOIN ('
-        ' 	SELECT sw.id AS windowID, sw.userID'
-        '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-        ' ) w ON n.windowID = w.windowID'
-        ' ORDER BY n.createdAt DESC'
+        ' FROM swNotification'
+        ' ORDER BY createdAt DESC'
     ).fetchall()
     return render_template('notification/index.html', notifications=notifications)
 
@@ -39,9 +36,9 @@ def create():
         else:
             my_db = db.get_db()
             my_db.execute(
-                'INSERT INTO swNotification (content, windowID)'
+                'INSERT INTO swNotification (content, typeID)'
                 ' VALUES (?, ?)',
-                (content, g.swindow['id'])
+                (content, 0)    # should be the id of an existing type
             )
             my_db.commit()
             return redirect(url_for('notification.index'))
@@ -52,10 +49,7 @@ def create():
 def get_notification(id, check_user=True):
     notification = db.get_db().execute(
         'SELECT *'
-        ' FROM swNotification n JOIN ('
-        ' 	SELECT sw.id AS windowID, sw.userID'
-        '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-        ' ) w ON n.windowID = w.windowID'
+        ' FROM swNotification'
         ' WHERE id = ?',
         (id,)
     ).fetchone()
