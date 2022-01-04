@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Interval{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    
+    <label for="iStart">start: </label>
+    <input type="datetime-local" name="iStart" id="iStart" value="{{ request.form['iStart'] }}" required>
+    
+    <label for="iEnd">end: </label>
+    <input type="datetime-local" name="iEnd" id="iEnd" value="{{ request.form['iEnd'] }}" required>
+
+    <label for="luminosity">luminosity: </label>
+    <input type="number" name="luminosity" step="0.01" id="luminosity" value="{{ request.form['luminosity'] }}">
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}userRoles{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('userRole.create') }}">New userRole</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for userRole in userRoles %}
+    <article class="post">
+      <header>
+        <h1>{{ userRole['roleName'] }}</h1>
+        <a class="action" href="{{ url_for('userRole.update', id=userRole['id']) }}">Edit</a>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

@@ -48,6 +48,8 @@ $env:FLASK_APP = "flaskr/__init__.py"
 $env:FLASK_ENV = "development"
 ```
 
+```export FLASK_APP="flaskr"```
+```export FLASK_ENV=development```
 
 Initialize (or reinitialize) database:
 ```flask init-db```

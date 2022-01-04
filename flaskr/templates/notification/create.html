@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Interval{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

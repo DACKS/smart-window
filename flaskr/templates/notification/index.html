@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Intervals{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('notification.create') }}">New notification</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for notification in notifications %}
+    <article class="post">
+      <header>
+        <h1>{{ notification['name'] }}</h1>
+        <a class="action" href="{{ url_for('notification.update', id=notification['id']) }}">Edit</a>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
