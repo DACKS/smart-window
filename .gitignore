@@ -1,4 +1,8 @@
 flaskr/lib
 flaskr/bin
 flaskr/venv/
+flaskr/__pycache__/
+flaskr/Scripts/
+flaskr/flaskr.egg-info/
+instance/db.sqlite
 instance
