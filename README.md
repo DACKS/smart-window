@@ -38,6 +38,14 @@ PowerShell: ```./venv/Scripts/Activate.ps1```
 cd ../
 ```
 
+```
+pip install flask
+```
+
+'''
+pip install flask_mqtt flask_socketio eventlet APScheduler flask_apscheduler
+'''
+
 Set environment value for development: export ```FLASK_ENV=development```
 
 CMD: set ```FLASK_ENV=development```

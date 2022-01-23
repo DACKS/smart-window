@@ -20,7 +20,6 @@ def index():
     ).fetchall()
     return render_template('userRole/index.html', userRoles=userRoles)
 
-
 @bp.route('/create', methods=('GET', 'POST'))
 @auth.login_required
 def create():

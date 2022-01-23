@@ -1,3 +1,4 @@
+from ast import Param
 import os
 from . import db
 from . import auth
@@ -8,6 +9,10 @@ from . import notificationType
 from . import statistics
 
 from flask import Flask
+from flask_mqtt import Mqtt
+from flask_apscheduler import APScheduler
+
+from status_api import publish
 
 
 def create_app(test_config=None):
@@ -16,7 +21,15 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'db.sqlite'),
+        MQTT_BROKER_URL='localhost',
+        MQTT_BROKER_PORT=1883,
+        MQTT_USERNAME='',
+        MQTT_PASSWORD='',
+        MQTT_KEEPALIVE=5,
+        MQTT_TLS_ENABLED = False
     )
+
+    mqtt = Mqtt()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -42,11 +55,13 @@ def create_app(test_config=None):
 
     app.add_url_rule('/', endpoint='index')
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    scheduler.start()
 
+    mqtt.init_app(app)
+
+    scheduler.add_job('mqtt_publish', publish, args=[mqtt], trigger="interval", seconds=1)
 
     return app
     

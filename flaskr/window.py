@@ -2,7 +2,7 @@ import functools
 from os import name
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 
 from . import db
@@ -19,7 +19,6 @@ def index():
         ' ORDER BY w.createdAt DESC'
     ).fetchall()
     return render_template('window/index.html', windows=windows)
-
 
 @bp.route('/create', methods=('GET', 'POST'))
 @auth.login_required

@@ -4,5 +4,6 @@ flaskr/venv/
 flaskr/__pycache__/
 flaskr/Scripts/
 flaskr/flaskr.egg-info/
+flaskr/false/
 instance/db.sqlite
 instance
