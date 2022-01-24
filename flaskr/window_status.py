@@ -4,6 +4,8 @@ import requests
 from singleton_meta import SingletonMeta
 from status_api import StatusApi
 
+import db
+
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
 
@@ -19,6 +21,10 @@ class WindowStatus(metaclass=SingletonMeta):
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
         self.current_outside_stats = CurrentStatistics()
+        self.app = None
+
+    def init_app(self, app):
+        self.app = app
 
     def update(self):
         self.update_outside_stats()
@@ -55,3 +61,30 @@ class WindowStatus(metaclass=SingletonMeta):
 
         status_api = StatusApi()
         status_api.publish_outside_stats(self.current_outside_stats)
+        self.update_statistics_db()
+
+    def update_statistics_db(self):
+
+        with self.app.app_context():
+            my_db = db.get_db()
+            query_results = my_db.execute("SELECT * FROM swStatistics WHERE DATE('now')=DATE(createdAt) and isExterior=1").fetchall()
+
+            if len(query_results) <= 0:
+                
+                my_db.execute(f"INSERT INTO swStatistics (isExterior, minTemperature, maxTemperature, humidity, pressure) VALUES (1, {self.current_outside_stats.temp_c}, {self.current_outside_stats.temp_c}, {self.current_outside_stats.humidity}, {self.current_outside_stats.pressure})")
+            
+                query_results2 = my_db.execute("SELECT * FROM swStatistics WHERE isExterior = 1").fetchall()
+                for result in query_results2:
+                    print(str(result["createdAt"]))
+
+            else:
+
+                result = query_results[0]
+                minTemperature = min(result["minTemperature"], self.current_outside_stats.temp_c)
+                maxTemperature = max(result["maxTemperature"], self.current_outside_stats.temp_c)
+                humidity = self.current_outside_stats.humidity
+                pressure = self.current_outside_stats.pressure
+
+                my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior=1")
+
+            my_db.commit()

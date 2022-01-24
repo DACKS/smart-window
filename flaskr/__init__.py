@@ -64,8 +64,9 @@ def create_app(test_config=None):
 
     status_api = StatusApi()
     status_api.set_mqtt_client(mqtt)
-    
+
     window = WindowStatus()
+    window.init_app(app)
 
     scheduler.add_job('window_update', window.update, args=[], trigger="interval", seconds=window_update_interval)
 

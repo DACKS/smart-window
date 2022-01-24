@@ -29,6 +29,9 @@ def init_db():
     with open('./flaskr/scheme.sql', encoding='utf8') as f:
         db.executescript(f.read())
 
+    with open('./flaskr/default_values.sql', encoding='utf8') as f:
+        db.executescript(f.read())
+
 @click.command('init-db')
 @with_appcontext
 def init_db_command():

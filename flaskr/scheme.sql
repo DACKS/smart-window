@@ -47,7 +47,7 @@ CREATE TABLE swNotification (
 
 CREATE TABLE swStatistics (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  isExterior boolean,
+  isExterior INTEGER,
   minTemperature FLOAT(2),
   maxTemperature FLOAT(2),
   humidity FLOAT(2),
