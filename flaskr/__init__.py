@@ -12,7 +12,8 @@ from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
-from status_api import publish
+from window_status import *
+from status_api import StatusApi
 
 
 def create_app(test_config=None):
@@ -61,7 +62,12 @@ def create_app(test_config=None):
 
     mqtt.init_app(app)
 
-    scheduler.add_job('mqtt_publish', publish, args=[mqtt], trigger="interval", seconds=1)
+    status_api = StatusApi()
+    status_api.set_mqtt_client(mqtt)
+    
+    window = WindowStatus()
+
+    scheduler.add_job('window_update', window.update, args=[], trigger="interval", seconds=window_update_interval)
 
     return app
     
