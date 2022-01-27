@@ -1,5 +1,7 @@
+import datetime
 import imp
 import json
+import math
 import random
 import requests
 from singleton_meta import SingletonMeta
@@ -9,6 +11,7 @@ import db
 
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
+inside_stats_update_interval = 60.0
 
 window_break_chance = 0.00001
 
@@ -23,7 +26,10 @@ class WindowStatus(metaclass=SingletonMeta):
     
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
+        self.accumulated_inside_update_time = 0.0
+
         self.current_outside_stats = CurrentStatistics()
+        self.current_inside_stats = CurrentStatistics()
         self.app = None
 
     def init_app(self, app):
@@ -31,6 +37,7 @@ class WindowStatus(metaclass=SingletonMeta):
 
     def update(self):
         self.update_outside_stats()
+        self.update_inside_stats()
         self.update_notifications()
 
     def update_outside_stats(self):
@@ -65,31 +72,61 @@ class WindowStatus(metaclass=SingletonMeta):
 
         status_api = StatusApi()
         status_api.publish_outside_stats(self.current_outside_stats)
-        self.update_statistics_db()
+        self.update_statistics_db(True, self.current_outside_stats)
 
-    def update_statistics_db(self):
+    # https://stackoverflow.com/questions/67230458/get-date-obj-as-percentage-of-that-day-python
+    def timedelta_percentage(self, input_datetime):
+        TOTAL_DAY_SECS = 86400.0
+        d = input_datetime - datetime.datetime.combine(input_datetime.date(), datetime.time())
+        return d.total_seconds() / TOTAL_DAY_SECS
+
+    def lerp(self, a, b, p):
+        return a + (b - a) * p
+
+    def update_inside_stats(self):
+
+        day_perc = self.timedelta_percentage(datetime.datetime.now())
+        self.current_inside_stats.temp_c = self.lerp(23.5, 25.5, math.sin(math.pi * day_perc))
+        self.current_inside_stats.humidity = self.lerp(40.0, 30.0, math.sin(math.pi * day_perc))
+        self.current_inside_stats.pressure = 1013.2
+
+        self.accumulated_inside_update_time += window_update_interval
+        if self.accumulated_inside_update_time < inside_stats_update_interval:
+            return
+
+        self.accumulated_inside_update_time -= inside_stats_update_interval
+
+        status_api = StatusApi()
+        status_api.publish_inside_stats(self.current_inside_stats)
+        self.update_statistics_db(False, self.current_inside_stats)
+
+    def update_statistics_db(self, isExterior, stats_object):
+
+        isExteriorBit = 0
+        if isExterior:
+            isExteriorBit = 1
 
         with self.app.app_context():
             my_db = db.get_db()
-            query_results = my_db.execute("SELECT * FROM swStatistics WHERE DATE('now')=DATE(createdAt) and isExterior=1").fetchall()
+            query_results = my_db.execute(f"SELECT * FROM swStatistics WHERE DATE('now')=DATE(createdAt) and isExterior={isExteriorBit}").fetchall()
 
             if len(query_results) <= 0:
                 
-                my_db.execute(f"INSERT INTO swStatistics (isExterior, minTemperature, maxTemperature, humidity, pressure) VALUES (1, {self.current_outside_stats.temp_c}, {self.current_outside_stats.temp_c}, {self.current_outside_stats.humidity}, {self.current_outside_stats.pressure})")
+                my_db.execute(f"INSERT INTO swStatistics (isExterior, minTemperature, maxTemperature, humidity, pressure) VALUES ({isExteriorBit}, {stats_object.temp_c}, {stats_object.temp_c}, {stats_object.humidity}, {stats_object.pressure})")
             
-                query_results2 = my_db.execute("SELECT * FROM swStatistics WHERE isExterior = 1").fetchall()
+                query_results2 = my_db.execute(f"SELECT * FROM swStatistics WHERE isExterior = {isExteriorBit}").fetchall()
                 for result in query_results2:
                     print(str(result["createdAt"]))
 
             else:
 
                 result = query_results[0]
-                minTemperature = min(result["minTemperature"], self.current_outside_stats.temp_c)
-                maxTemperature = max(result["maxTemperature"], self.current_outside_stats.temp_c)
-                humidity = self.current_outside_stats.humidity
-                pressure = self.current_outside_stats.pressure
+                minTemperature = min(result["minTemperature"], stats_object.temp_c)
+                maxTemperature = max(result["maxTemperature"], stats_object.temp_c)
+                humidity = stats_object.humidity
+                pressure = stats_object.pressure
 
-                my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior=1")
+                my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior={isExteriorBit}")
 
             my_db.commit()
 
