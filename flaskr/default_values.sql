@@ -1,0 +1,1 @@
+INSERT INTO notificationType VALUES (0, "Integrity problem", CURRENT_TIMESTAMP)

@@ -1,5 +1,6 @@
 import imp
 import json
+import random
 import requests
 from singleton_meta import SingletonMeta
 from status_api import StatusApi
@@ -8,6 +9,8 @@ import db
 
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
+
+window_break_chance = 0.00001
 
 class CurrentStatistics:
 
@@ -28,6 +31,7 @@ class WindowStatus(metaclass=SingletonMeta):
 
     def update(self):
         self.update_outside_stats()
+        self.update_notifications()
 
     def update_outside_stats(self):
         self.accumulated_outside_update_time += window_update_interval
@@ -88,3 +92,35 @@ class WindowStatus(metaclass=SingletonMeta):
                 my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior=1")
 
             my_db.commit()
+
+
+    def tried_break_window(self):
+        chance = random.random()
+        if chance < window_break_chance:
+            return True
+
+        return False
+
+    def update_notifications(self):
+
+        notif_type = -1
+        notification_content = ""
+
+        if self.tried_break_window():
+            notif_type = 0
+            notification_content = "Someone is trying to break the window."
+
+        if notif_type == -1:
+            return
+
+        with self.app.app_context():
+            my_db = db.get_db()
+            notification_descs = my_db.execute(f"SELECT * FROM notificationType n WHERE n.id = {notif_type}").fetchall()
+            
+            if len(notification_descs) > 0:
+
+                status_api = StatusApi()
+                status_api.publish_notification(notification_content)
+
+                my_db.execute(f"INSERT INTO swNotification (content, typeID, createdAt) VALUES ('{notification_content}', {notif_type}, CURRENT_TIMESTAMP)")
+                my_db.commit()
