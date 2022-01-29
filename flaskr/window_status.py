@@ -10,8 +10,8 @@ from .status_api import StatusApi
 from . import db
 
 window_update_interval = 0.1
-outside_stats_update_interval = 60.0
-inside_stats_update_interval = 60.0
+outside_stats_update_interval = 1.0
+inside_stats_update_interval = 1.0
 
 window_break_chance = 0.00001
 

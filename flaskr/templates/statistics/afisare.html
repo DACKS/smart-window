@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+<article class="post">
+  <h1>ID: <span>{{ statistics2['id'] }}</span></h1>
+  <hr />
+  <h1>Exterior: <span>{{ statistics2['isExterior'] }}</span></h1>
+  <hr />
+  <h1>Min Temperature: <span>{{ statistics2['minTemperature'] }}</span></h1>
+  <hr />
+  <h1>Max Temperature: <span>{{ statistics2['maxTemperature'] }}</span></h1>
+  <hr />
+  <h1>Humidity: <span>{{ statistics2['humidity'] }}</span></h1>
+  <hr />
+  <h1>Pressure: <span>{{ statistics2['pressure'] }}</span></h1>
+  <hr />
+  <h1>Created Time: <span>{{ statistics2['createdAt'] }}</span></h1>
+  <hr />
+  <a class="action" href="{{ url_for('statistics.afisare') }}">Refresh</a>
+</article>
+<hr />
+{% endblock %}

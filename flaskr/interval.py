@@ -71,6 +71,7 @@ def get_interval(id, check_user=True):
     return interval
 
 
+
 @bp.route('/interval/<int:id>/update', methods=('GET', 'POST'))
 @auth.login_required
 def update(id):
