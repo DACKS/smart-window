@@ -12,8 +12,8 @@ from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
-from window_status import *
-from status_api import StatusApi
+from .window_status import *
+from .status_api import StatusApi
 
 
 def create_app(test_config=None):

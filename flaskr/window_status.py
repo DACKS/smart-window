@@ -4,10 +4,10 @@ import json
 import math
 import random
 import requests
-from singleton_meta import SingletonMeta
-from status_api import StatusApi
+from .singleton_meta import SingletonMeta
+from .status_api import StatusApi
 
-import db
+from . import db
 
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
