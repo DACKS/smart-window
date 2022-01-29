@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}New Interval{% endblock %}</h1>
+{% endblock %} {% block content %}
+<form method="post">
+  <label for="name">Name</label>
+  <input name="name" id="name" value="{{ request.form['name'] }}" required />
+
+  <label for="opendirection">Open direction </label>
+  <select name="opendirection" id="opendirection">
+    <option value="left">Left</option>
+    <option value="fold">Fold</option>
+    <option value="right">Right</option>
+  </select>
+
+  <label for="openangle">Open angle </label>
+  <input
+    type="number"
+    min="0"
+    max="90"
+    name="openangle"
+    step="5"
+    id="openangle"
+    value="{{ request.form['openangle'] }}"
+    required
+  />
+
+  <label for="integrity">Integrity </label>
+  <input
+    type="number"
+    name="integrity"
+    min="0"
+    max="100"
+    step="1"
+    id="integrity"
+    value="{{ request.form['integrity'] }}"
+  />
+
+  <input type="submit" value="Save" />
+</form>
+{% endblock %}

@@ -5,12 +5,14 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 
+
 from . import db
 from . import auth
+import json
 
 bp = Blueprint('window', __name__)
 
-@bp.route('/')
+@bp.route('/window/')
 def index():
     my_db = db.get_db()
     windows = my_db.execute(
@@ -20,7 +22,7 @@ def index():
     ).fetchall()
     return render_template('window/index.html', windows=windows)
 
-@bp.route('/create', methods=('GET', 'POST'))
+@bp.route('/window/create', methods=('GET', 'POST'))
 @auth.login_required
 def create():
     if request.method == 'POST':
@@ -30,11 +32,11 @@ def create():
         if not name:
             error = 'Title is required.'
 
-        openDirection = request.form['name']
+        openDirection = request.form['opendirection']
 
-        openAngle = request.form['name']
+        openAngle = request.form['openangle']
 
-        integrity = request.form['name']
+        integrity = request.form['integrity']
 
         if error is not None:
             flash(error)
@@ -79,15 +81,15 @@ def update(id):
         if not name:
             error = 'Name is required.'
 
-        openDirection = request.form['name']
+        openDirection = request.form['opendirection']
         if not openDirection:
             error = 'Open direction is not specified.'
 
-        openAngle = request.form['name']
+        openAngle = request.form['openangle']
         if not openAngle:
             error = 'Open angle is not specified.'
 
-        integrity = request.form['name']
+        integrity = request.form['integrity']
         if not integrity:
             integrity = 'Integrity is required.'
 

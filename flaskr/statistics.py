@@ -2,7 +2,7 @@ import functools
 from os import name
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 
 from . import db
@@ -125,6 +125,24 @@ def update(id):
             return redirect(url_for('statistics.index'))
 
     return render_template('statistics/update.html', statistics=statistics)
+
+def get_all_statistics(check_user=True):
+    statistics2 = db.get_db().execute(
+        'SELECT * from swStatistics'
+    ).fetchone()
+
+    return statistics2
+
+@bp.route('/afisare', methods=('GET', 'POST'))
+@auth.login_required
+def afisare():
+    statistics2 = get_all_statistics()
+    print("aa")
+    print(len(statistics2))
+    for row in statistics2:
+        print(row)
+
+    return render_template('statistics/afisare.html', statistics2=statistics2)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))

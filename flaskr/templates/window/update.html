@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ interval['name'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name"
+      value="{{ request.form['name'] or interval['name'] }}" required>
+
+    <label for="iStart">start: </label>
+    <input type="date" name="iStart" id="iStart" 
+      value="{{ request.form['iStart'] or interval['iStart'] }}" required>
+    
+    <label for="iEnd">end: </label>
+    <input type="date" name="iEnd" id="iEnd" 
+      value="{{ request.form['iEnd'] or interval['iEnd'] }}" required>
+
+    <label for="luminosity">luminosity: </label>
+    <input type="number" name="luminosity" step="0.01" id="luminosity" 
+      value="{{ request.form['luminosity']  or interval['luminosity'] }}">
+
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('interval.delete', id=interval['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
