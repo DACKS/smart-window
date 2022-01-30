@@ -120,8 +120,8 @@ class WindowStatus(metaclass=SingletonMeta):
                 my_db.execute(f"INSERT INTO swStatistics (isExterior, minTemperature, maxTemperature, humidity, pressure) VALUES ({isExteriorBit}, {stats_object.temp_c}, {stats_object.temp_c}, {stats_object.humidity}, {stats_object.pressure})")
             
                 query_results2 = my_db.execute(f"SELECT * FROM swStatistics WHERE isExterior = {isExteriorBit}").fetchall()
-                for result in query_results2:
-                    print(str(result["createdAt"]))
+                # for result in query_results2:
+                #     print(str(result["createdAt"]))
 
             else:
 

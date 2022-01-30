@@ -123,6 +123,7 @@ def delete(id):
     my_db.commit()
     return redirect(url_for('statistics.index'))
 
+
 @bp.route('/statistics/', methods=('GET',))
 @auth.login_required
 def display():

@@ -10,7 +10,7 @@ from . import auth
 
 bp = Blueprint('notificationType', __name__)
 
-@bp.route('/')
+@bp.route('/notType')
 def index():
     my_db = db.get_db()
     notificationTypes = my_db.execute(

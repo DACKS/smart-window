@@ -7,15 +7,15 @@ from . import interval
 from . import notification
 from . import notificationType
 from . import statistics
-print('1')
+from . import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
-print('2')
+from .window_status import *
+from .status_api import StatusApi
 
 from .window_status import *
-print('3')
 from .status_api import StatusApi
 
 def create_app(test_config=None):
@@ -51,6 +51,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(interval.bp)
+    app.register_blueprint(win.bp)
     app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(notificationType.bp)
