@@ -10,7 +10,7 @@ from . import auth
 
 bp = Blueprint('userRole', __name__)
 
-@bp.route('/')
+@bp.route('/roles')
 def index():
     my_db = db.get_db()
     userRoles = my_db.execute(

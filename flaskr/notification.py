@@ -10,7 +10,7 @@ from . import auth
 
 bp = Blueprint('notification', __name__)
 
-@bp.route('/')
+@bp.route('/notifications')
 def index():
     my_db = db.get_db()
     notifications = my_db.execute(

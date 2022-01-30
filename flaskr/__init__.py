@@ -7,14 +7,16 @@ from . import interval
 from . import notification
 from . import notificationType
 from . import statistics
-
+print('1')
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
-from window_status import *
-from status_api import StatusApi
+print('2')
 
+from .window_status import *
+print('3')
+from .status_api import StatusApi
 
 def create_app(test_config=None):
     # create and configure the app
@@ -22,7 +24,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'db.sqlite'),
-        MQTT_BROKER_URL='localhost',
+        MQTT_BROKER_URL='0.0.0.0',
         MQTT_BROKER_PORT=1883,
         MQTT_USERNAME='',
         MQTT_PASSWORD='',

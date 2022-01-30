@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Windows{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('statistics.create') }}">New statistics</a>
-  {% endif %}
+  <h1>{% block title %}Statistics {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  {% for statistics in statisticsList %}
+  {% for stat in statistics %}
     <article class="post">
       <header>
-        <h1>{{ statistics['name'] }}</h1>
-        <a class="action" href="{{ url_for('statistics.update', id=statistics['id']) }}">Edit</a>
+        <h1>{{ stat['createdAt'] }}</h1>
       </header>
+
+      <h2>{{stat['isExterior']}}</h2>
+      <label>Min °C: </label> <span>{{stat['minTemperature']}}</span> <br>
+      <label>Max °C: </label> <span>{{stat['minTemperature']}}</span> <br>
+      <label>Humidity: </label> <span>{{stat['humidity']}}</span> <br>
+      <label>Pressure: </label> <span>{{stat['pressure']}}</span> <br>
     </article>
     {% if not loop.last %}
       <hr>

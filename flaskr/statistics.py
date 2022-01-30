@@ -1,5 +1,6 @@
 import functools
 from os import name
+import statistics
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -9,19 +10,6 @@ from . import db
 from . import auth
 
 bp = Blueprint('statistics', __name__)
-
-@bp.route('/')
-def index():
-    my_db = db.get_db()
-    statisticsList = my_db.execute(
-        'SELECT *'
-        ' FROM swStatistics ss JOIN ('
-        ' 	SELECT sw.id AS windowID, u.id AS userID'
-        '	FROM swindow sw JOIN user u ON sw.userID = u.id'
-        ' ) w ON ss.windowID = w.windowID'
-        ' ORDER BY ss.createdAt DESC'
-    ).fetchall()
-    return render_template('statistics/index.html', statisticsList=statisticsList)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -134,3 +122,21 @@ def delete(id):
     my_db.execute('DELETE FROM swStatistics WHERE id = ?', (id,))
     my_db.commit()
     return redirect(url_for('statistics.index'))
+
+@bp.route('/statistics/', methods=('GET',))
+@auth.login_required
+def display():
+    my_db = db.get_db()
+    stats = my_db.execute(
+        'SELECT *'
+        ' FROM swStatistics'
+        ' ORDER BY createdAt DESC'
+    ).fetchall()
+    stats = [dict(row) for row in stats]
+    for stat in stats:
+        stat['isExterior'] = 'Exterior' if stat['isExterior'] else 'Interior'
+        stat['minTemperature'] = round(stat['minTemperature'], 2)
+        stat['maxTemperature'] = round(stat['maxTemperature'], 2)
+        stat['humidity'] = round(stat['humidity'], 2)
+        stat['pressure'] = round(stat['pressure'], 2)
+    return render_template('statistics/index.html', statistics=stats, stat_length=len(stats))

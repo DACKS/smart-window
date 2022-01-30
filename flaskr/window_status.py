@@ -1,19 +1,21 @@
+
 import datetime
-import imp
 import json
 import math
 import random
+from re import S
 import requests
-from singleton_meta import SingletonMeta
-from status_api import StatusApi
-
-import db
+from .singleton_meta import SingletonMeta
+from .status_api import StatusApi
+from . import db
 
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
-inside_stats_update_interval = 60.0
+inside_stats_update_interval = 10.0
+notifications_update_interval = 5.0
 
 window_break_chance = 0.00001
+humidity_threshold = 30
 
 class CurrentStatistics:
 
@@ -22,14 +24,17 @@ class CurrentStatistics:
         self.pressure = 0
         self.humidity = 0
 
+
 class WindowStatus(metaclass=SingletonMeta):
     
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
         self.accumulated_inside_update_time = 0.0
+        self.accumulated_notifications_update_time = 0.0
 
         self.current_outside_stats = CurrentStatistics()
         self.current_inside_stats = CurrentStatistics()
+
         self.app = None
 
     def init_app(self, app):
@@ -137,15 +142,31 @@ class WindowStatus(metaclass=SingletonMeta):
             return True
 
         return False
+    
+    def too_high_humidity(self):
+        if self.current_inside_stats.humidity > humidity_threshold:
+            return True
+        return False
 
     def update_notifications(self):
+
+        
+        self.accumulated_notifications_update_time += window_update_interval
+        if self.accumulated_notifications_update_time < notifications_update_interval:
+            return
+
+        self.accumulated_notifications_update_time -= notifications_update_interval
 
         notif_type = -1
         notification_content = ""
 
         if self.tried_break_window():
             notif_type = 0
-            notification_content = "Someone is trying to break the window."
+            notification_content += "Someone is trying to break the window."
+
+        if self.too_high_humidity():
+            notif_type = 1
+            notification_content += "Too high humidity, you should open the window."
 
         if notif_type == -1:
             return
