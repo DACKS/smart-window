@@ -9,10 +9,13 @@ from .singleton_meta import SingletonMeta
 from .status_api import StatusApi
 from . import db
 
+from .storage.window_data import WindowData
+window = WindowData()
+
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
 inside_stats_update_interval = 10.0
-notifications_update_interval = 5.0
+notifications_update_interval = 10.0
 
 window_break_chance = 0.00001
 humidity_threshold = 30
@@ -164,9 +167,11 @@ class WindowStatus(metaclass=SingletonMeta):
             notif_type = 0
             notification_content += "Someone is trying to break the window."
 
-        if self.too_high_humidity():
+        humidity_check = window.humidity_check(self.current_inside_stats.humidity, self.current_outside_stats.humidity)
+        if humidity_check is not None:
             notif_type = 1
-            notification_content += "Too high humidity, you should open the window."
+            notification_content += humidity_check
+
 
         if notif_type == -1:
             return

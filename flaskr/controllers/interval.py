@@ -5,7 +5,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 
-from . import db
+from ..storage import db
 from . import auth
 
 bp = Blueprint('interval', __name__)

@@ -1,19 +1,16 @@
 from ast import Param
 import os
-from . import db
-from . import auth
-from . import userRole
-from . import interval
-from . import notification
-from . import notificationType
-from . import statistics
-from . import window as win
+from .storage import db
+from .controllers import auth
+from .controllers import userRole
+from .controllers import interval
+from .controllers import notification
+from .controllers import notificationType
+from .controllers import statistics
+from .controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
-
-from .window_status import *
-from .status_api import StatusApi
 
 from .window_status import *
 from .status_api import StatusApi
