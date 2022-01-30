@@ -8,13 +8,13 @@
       <li><span>{{ g.user['username'] }}</span>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
       <li><a href="{{ url_for('statistics.afisare') }}">Statistics</a> </li>
-      <li><a href="{{ url_for('window.create') }}">Window</a> </li>
+      <li><a href="{{ url_for('window.index') }}">Window</a> </li>
 
     {% else %}
 
       <li><a href="{{ url_for('auth.register') }}">Register</a>
       <li><a href="{{ url_for('auth.login') }}">Log In</a>
-        
+
     {% endif %}
   </ul>
 </nav>

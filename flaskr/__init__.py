@@ -9,6 +9,7 @@ from . import notificationType
 from . import statistics
 from . import window2
 
+
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler

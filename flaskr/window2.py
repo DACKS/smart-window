@@ -21,9 +21,9 @@ def index():
         
     return render_template('window/index.html', window=window)
 
-@bp.route('/window/create', methods=('GET', 'POST'))
+@bp.route('/window/update', methods=('GET', 'POST'))
 @auth.login_required
-def create():
+def update():
     if request.method == 'POST':
         error = None
 
@@ -47,6 +47,6 @@ def create():
                 json.dump(x,f)
             return redirect(url_for('window.index'))
 
-    return render_template('window/create.html')
+    return render_template('window/update.html')
 
 

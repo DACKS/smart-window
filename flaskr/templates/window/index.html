@@ -3,7 +3,7 @@
 {% block header %}
   <h1>{% block title %}Window{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('window.create') }}">New interval</a>
+    <a class="action" href="{{ url_for('window.update') }}">Update</a>
   {% endif %}
 {% endblock %}
 

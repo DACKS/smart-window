@@ -138,10 +138,7 @@ def delete(id):
 
 
 def get_all_statistics(check_user=True):
-    statistics = db.get_db().execute(
-        'SELECT * from swStatistics'
-    ).fetchone()
-
+    
 
     my_db = db.get_db()
     statistics = my_db.execute(
