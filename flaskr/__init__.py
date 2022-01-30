@@ -47,8 +47,11 @@ def create_app(test_config=None):
     db.init_app(app)
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(auth.bp_api)
     app.register_blueprint(interval.bp)
+    app.register_blueprint(interval.bp_api)
     app.register_blueprint(win.bp)
+    app.register_blueprint(win.bp_api)
     app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(notificationType.bp)

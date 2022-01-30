@@ -1,16 +1,18 @@
 import functools
 from os import name
+import json
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort, jsonify
 )
 
 from ..storage import db
 from . import auth
 
-bp = Blueprint('interval', __name__)
+bp = Blueprint('intervals', __name__, url_prefix='/intervals')
+bp_api = Blueprint('auth-intervals', __name__, url_prefix='/api/intervals')
 
-@bp.route('/intervals/')
+@bp.route('/', methods=['GET'])
 def index():
     my_db = db.get_db()
     intervals = my_db.execute(
@@ -18,10 +20,20 @@ def index():
         ' FROM interval'
         ' ORDER BY createdAt DESC'
     ).fetchall()
-    return render_template('interval/index.html', intervals=intervals)
+    return render_template('intervals/index.html', intervals=intervals)
+
+@bp_api.route('/', methods=['GET', 'POST'])
+def api_index():
+    my_db = db.get_db()
+    intervals = my_db.execute(
+        'SELECT *'
+        ' FROM interval'
+        ' ORDER BY createdAt DESC'
+    ).fetchall()
+    return json.dumps( [dict(interval) for interval in intervals], default=str)
 
 
-@bp.route('/interval/create', methods=('GET', 'POST'))
+@bp.route('/create', methods=('GET', 'POST'))
 @auth.login_required
 def create():
     if request.method == 'POST':
@@ -49,9 +61,9 @@ def create():
                 (name, iStart, iEnd, luminosity)
             )
             my_db.commit()
-            return redirect(url_for('interval.index'))
+            return redirect(url_for('intervals.index'))
 
-    return render_template('interval/create.html')
+    return render_template('intervals/create.html')
 
 
 def get_interval(id, check_user=True):
@@ -71,7 +83,7 @@ def get_interval(id, check_user=True):
     return interval
 
 
-@bp.route('/interval/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @auth.login_required
 def update(id):
     interval = get_interval(id)
@@ -101,15 +113,15 @@ def update(id):
                 (name, iStart, iEnd, luminosity, id)
             )
             my_db.commit()
-            return redirect(url_for('interval.index'))
+            return redirect(url_for('intervals.index'))
 
-    return render_template('interval/update.html', interval=interval)
+    return render_template('intervals/update.html', interval=interval)
 
 
-@bp.route('/interval/<int:id>/delete', methods=('POST',))
+@bp.route('/<int:id>/delete', methods=('POST',))
 @auth.login_required
 def delete(id):
     my_db = db.get_db()
     my_db.execute('DELETE FROM interval WHERE id = ?', (id,))
     my_db.commit()
-    return redirect(url_for('interval.index'))
+    return redirect(url_for('intervals.index'))
