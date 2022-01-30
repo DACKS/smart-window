@@ -134,3 +134,28 @@ def delete(id):
     my_db.execute('DELETE FROM swStatistics WHERE id = ?', (id,))
     my_db.commit()
     return redirect(url_for('statistics.index'))
+
+
+
+def get_all_statistics(check_user=True):
+    statistics = db.get_db().execute(
+        'SELECT * from swStatistics'
+    ).fetchone()
+
+
+    my_db = db.get_db()
+    statistics = my_db.execute(
+        'SELECT *'
+        ' FROM swStatistics'
+        ' ORDER BY id'
+    ).fetchall()
+
+    return statistics
+
+@bp.route('/afisare', methods=('GET', 'POST'))
+@auth.login_required
+def afisare():
+    statistics2 = get_all_statistics()
+    
+
+    return render_template('statistics/afisare.html', statistics2=statistics2)

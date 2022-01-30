@@ -7,6 +7,7 @@ from . import interval
 from . import notification
 from . import notificationType
 from . import statistics
+from . import window2
 
 from flask import Flask
 from flask_mqtt import Mqtt
@@ -49,6 +50,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(interval.bp)
+    app.register_blueprint(window2.bp)
     app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(notificationType.bp)

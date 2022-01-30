@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Window{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('window.create') }}">New interval</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+ 
+    <article class="post">
+    
+        <h1>Name:{{window["name"] }}</h1>
+        <hr>
+        <p>Open Direction: {{ window["openDirection"] }}</p> 
+        <hr>
+        <p>Open Angle: {{ window["openAngle"] }}</p>
+        <hr>
+        <p>Integrity: {{ window["integrity"] }}</p>
+        <hr>
+     
+    </article>
+    
+  
+{% endblock %}
