@@ -6,12 +6,12 @@ import sys
 import json
 from datetime import date, datetime
 
-from __init__ import create_app
-from storage import db
-from storage.window_data import WindowData
+from flaskr.__init__ import create_app
+from flaskr.storage import db
+from flaskr.storage.window_data import WindowData
 from flaskr import WindowStatus, humidity_threshold
 
-from controllers.interval import DATE_FORMAT
+from flaskr.controllers.interval import DATE_FORMAT
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
