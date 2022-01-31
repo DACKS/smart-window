@@ -6,8 +6,8 @@ from flask import (
     Blueprint, render_template, jsonify
 )
 
-from ..storage import db
-from . import auth
+from flaskr.storage import db
+from flaskr.controllers import auth
 
 bp = Blueprint('notification', __name__, url_prefix='/notifications')
 bp_api = Blueprint('api-notification', __name__, url_prefix='/api/notifications')

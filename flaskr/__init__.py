@@ -1,26 +1,30 @@
 from ast import Param
 import os
-from .storage import db
-from .controllers import auth
-from .controllers import userRole
-from .controllers import interval
-from .controllers import notification
-from .controllers import notificationType
-from .controllers import statistics
-from .controllers import window as win
+from flaskr.storage import db
+from flaskr.controllers import auth
+from flaskr.controllers import userRole
+from flaskr.controllers import interval
+from flaskr.controllers import notification
+from flaskr.controllers import notificationType
+from flaskr.controllers import statistics
+from flaskr.controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
-from .window_status import *
-from .status_api import StatusApi
+from flaskr.window_status import *
+from flaskr.status_api import StatusApi
 
-def create_app(test_config=None):
+def create_app(testing=False, db_path=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
+    if db_path is None:
+        db_path = os.path.join(app.instance_path, 'db.sqlite')
+
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'db.sqlite'),
+        DATABASE=db_path,
         MQTT_BROKER_URL='localhost',
         MQTT_BROKER_PORT=1883,
         MQTT_USERNAME='',
@@ -31,12 +35,8 @@ def create_app(test_config=None):
 
     mqtt = Mqtt()
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+    if testing:
+        app.config['TESTING'] = True
 
     # ensure the instance folder exists
     try:
