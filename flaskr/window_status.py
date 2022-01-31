@@ -5,9 +5,9 @@ import math
 import random
 from re import S
 import requests
-from .singleton_meta import SingletonMeta
-from .status_api import StatusApi
-from . import db
+from flaskr.singleton_meta import SingletonMeta
+from flaskr.status_api import StatusApi
+from flaskr import db
 
 from .storage.window_data import WindowData
 window = WindowData()

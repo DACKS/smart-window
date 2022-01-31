@@ -4,10 +4,10 @@ from os import name
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, abort, jsonify
 )
-from ..storage.window_data import WindowData
+from flaskr.storage.window_data import WindowData
 window = WindowData()
 
-from . import auth
+from flaskr.controllers import auth
 
 bp = Blueprint('window', __name__)
 bp_api = Blueprint('api-window', __name__, url_prefix='/api/window')

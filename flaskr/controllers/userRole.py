@@ -5,8 +5,8 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from ..storage import db
-from . import auth
+from flaskr.storage import db
+from flaskr.controllers import auth
 
 bp = Blueprint('userRole', __name__)
 

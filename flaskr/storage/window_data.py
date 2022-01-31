@@ -1,19 +1,31 @@
 import json
 import os
-from ..singleton_meta import SingletonMeta
+from flaskr.singleton_meta import SingletonMeta
+from pathlib import Path
 
 class WindowData(metaclass=SingletonMeta):
     MAX_OPEN_ANGLE = 90
     JSON_PATH = os.path.join(os.path.dirname(__file__), 'windows.json')
 
     def __init__(self):
+        self.alter_file_path(self.JSON_PATH)
+        self.reload_json()
+
+    def alter_file_path(self, new_file_path):
+        self.JSON_PATH = new_file_path
+        if not os.path.exists(self.JSON_PATH):
+            myfile = Path(self.JSON_PATH)
+            myfile.touch(exist_ok=True)
+            self.update_window_data("", 0, 0, 100)
+        
+    def reload_json(self):
         with open(self.JSON_PATH, "r") as f:
-            w= json.load(f)
-        self.name = w['name']
-        self.openDirection = w['openDirection']
-        self.openAngle = w['openAngle']
-        self.integrity = w['integrity']
-    
+            w = json.load(f)
+            self.name = w['name']
+            self.openDirection = w['openDirection']
+            self.openAngle = w['openAngle']
+            self.integrity = w['integrity']
+
     def get_dict(self):
         return {
             'name': self.name,
@@ -37,6 +49,7 @@ class WindowData(metaclass=SingletonMeta):
             self.openAngle = int(openAngle)
         if integrity is not None:
             self.integrity = int(integrity)
+
         self._update_json()
 
     def humidity_check(self, inside_humidity, outside_humidity):
