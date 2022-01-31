@@ -69,3 +69,6 @@ Initialize (or reinitialize) database:
 
 Run
 ```flask run```
+
+Unit tests (run from the smart-window folder)
+```python -m pytest ./tests```
