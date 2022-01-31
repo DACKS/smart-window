@@ -91,27 +91,26 @@ def login():
 
 @bp_api.route('/login', methods=['POST'])
 def api_login():
-    if request.method == 'POST':
-        username = request.json.get('username')
-        password = request.json.get('password')
+    username = request.json.get('username')
+    password = request.json.get('password')
 
-        my_db = db.get_db()
-        error = None
-        user = my_db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+    my_db = db.get_db()
+    error = None
+    user = my_db.execute(
+        'SELECT * FROM user WHERE username = ?', (username,)
+    ).fetchone()
 
-        if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+    if user is None:
+        error = 'Incorrect username.'
+    elif not check_password_hash(user['password'], password):
+        error = 'Incorrect password.'
 
-        if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return jsonify({'message': f" {user['username']} logged in with success"})
+    if error is None:
+        session.clear()
+        session['user_id'] = user['id']
+        return jsonify({'message': f" {user['username']} logged in with success"})
 
-        return jsonify({'message': error})
+    return jsonify({'error': error})
 
 
 

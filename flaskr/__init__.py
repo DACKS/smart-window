@@ -54,8 +54,10 @@ def create_app(test_config=None):
     app.register_blueprint(win.bp_api)
     app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
+    app.register_blueprint(notification.bp_api)
     app.register_blueprint(notificationType.bp)
     app.register_blueprint(statistics.bp)
+    app.register_blueprint(statistics.bp_api)
 
     app.add_url_rule('/', endpoint='index')
 
