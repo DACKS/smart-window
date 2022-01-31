@@ -1,20 +1,19 @@
 from ast import Param
 import os
-from . import db
-from . import auth
-from . import userRole
-from . import interval
-from . import notification
-from . import notificationType
-from . import statistics
-
+from .storage import db
+from .controllers import auth
+from .controllers import userRole
+from .controllers import interval
+from .controllers import notification
+from .controllers import notificationType
+from .controllers import statistics
+from .controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
 
 from .window_status import *
 from .status_api import StatusApi
-
 
 def create_app(test_config=None):
     # create and configure the app
@@ -48,11 +47,17 @@ def create_app(test_config=None):
     db.init_app(app)
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(auth.bp_api)
     app.register_blueprint(interval.bp)
+    app.register_blueprint(interval.bp_api)
+    app.register_blueprint(win.bp)
+    app.register_blueprint(win.bp_api)
     app.register_blueprint(userRole.bp)
     app.register_blueprint(notification.bp)
+    app.register_blueprint(notification.bp_api)
     app.register_blueprint(notificationType.bp)
     app.register_blueprint(statistics.bp)
+    app.register_blueprint(statistics.bp_api)
 
     app.add_url_rule('/', endpoint='index')
 

@@ -1,19 +1,24 @@
+
 import datetime
-import imp
 import json
 import math
 import random
+from re import S
 import requests
 from .singleton_meta import SingletonMeta
 from .status_api import StatusApi
-
 from . import db
+
+from .storage.window_data import WindowData
+window = WindowData()
 
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
-inside_stats_update_interval = 60.0
+inside_stats_update_interval = 10.0
+notifications_update_interval = 10.0
 
 window_break_chance = 0.00001
+humidity_threshold = 30
 
 class CurrentStatistics:
 
@@ -22,14 +27,17 @@ class CurrentStatistics:
         self.pressure = 0
         self.humidity = 0
 
+
 class WindowStatus(metaclass=SingletonMeta):
     
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
         self.accumulated_inside_update_time = 0.0
+        self.accumulated_notifications_update_time = 0.0
 
         self.current_outside_stats = CurrentStatistics()
         self.current_inside_stats = CurrentStatistics()
+
         self.app = None
 
     def init_app(self, app):
@@ -115,8 +123,8 @@ class WindowStatus(metaclass=SingletonMeta):
                 my_db.execute(f"INSERT INTO swStatistics (isExterior, minTemperature, maxTemperature, humidity, pressure) VALUES ({isExteriorBit}, {stats_object.temp_c}, {stats_object.temp_c}, {stats_object.humidity}, {stats_object.pressure})")
             
                 query_results2 = my_db.execute(f"SELECT * FROM swStatistics WHERE isExterior = {isExteriorBit}").fetchall()
-                for result in query_results2:
-                    print(str(result["createdAt"]))
+                # for result in query_results2:
+                #     print(str(result["createdAt"]))
 
             else:
 
@@ -137,15 +145,33 @@ class WindowStatus(metaclass=SingletonMeta):
             return True
 
         return False
+    
+    def too_high_humidity(self):
+        if self.current_inside_stats.humidity > humidity_threshold:
+            return True
+        return False
 
     def update_notifications(self):
+
+        
+        self.accumulated_notifications_update_time += window_update_interval
+        if self.accumulated_notifications_update_time < notifications_update_interval:
+            return
+
+        self.accumulated_notifications_update_time -= notifications_update_interval
 
         notif_type = -1
         notification_content = ""
 
         if self.tried_break_window():
             notif_type = 0
-            notification_content = "Someone is trying to break the window."
+            notification_content += "Someone is trying to break the window."
+
+        humidity_check = window.humidity_check(self.current_inside_stats.humidity, self.current_outside_stats.humidity)
+        if humidity_check is not None:
+            notif_type = 1
+            notification_content += humidity_check
+
 
         if notif_type == -1:
             return

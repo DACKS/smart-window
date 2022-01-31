@@ -5,12 +5,12 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from . import db
+from ..storage import db
 from . import auth
 
 bp = Blueprint('userRole', __name__)
 
-@bp.route('/')
+@bp.route('/roles')
 def index():
     my_db = db.get_db()
     userRoles = my_db.execute(
@@ -86,10 +86,10 @@ def update(id):
     return render_template('userRole/update.html', userRole=userRole)
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
-@auth.login_required
-def delete(id):
-    my_db = db.get_db()
-    my_db.execute('DELETE FROM userRole WHERE id = ?', (id,))
-    my_db.commit()
-    return redirect(url_for('userRole.index'))
+#@bp.route('/<int:id>/delete', methods=('POST',))
+#@auth.login_required
+#def delete(id):
+#    my_db = db.get_db()
+#    my_db.execute('DELETE FROM userRole WHERE id = ?', (id,))
+#    my_db.commit()
+#    return redirect(url_for('userRole.index'))

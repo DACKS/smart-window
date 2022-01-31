@@ -3,7 +3,7 @@
 {% block header %}
   <h1>{% block title %}Intervals{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('interval.create') }}">New interval</a>
+    <a class="action" href="{{ url_for('intervals.create') }}">New interval</a>
   {% endif %}
 {% endblock %}
 
@@ -19,7 +19,7 @@
         <hr>
         <p>createdAt: {{ interval['createdAt'] }}</p>
         <hr>
-        <a class="action" href="{{ url_for('interval.update', id=interval['id']) }}">Edit</a>
+        <a class="action" href="{{ url_for('intervals.update', id=interval['id']) }}">Edit</a>
       </header>
     </article>
     {% if not loop.last %}

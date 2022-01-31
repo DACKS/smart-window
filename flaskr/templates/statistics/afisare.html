@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<a class="action" href="{{ url_for('statistics.afisare') }}">Refresh</a>
+  {% for statistic in statistics2 %}
+
+<article class="post">
+
+    
+  <h1>ID: <span>{{ statistic['id'] }}</span></h1>
+  <hr />
+  <h1>Exterior: <span>{{ statistic['isExterior'] }}</span></h1>
+  <hr />
+  <h1>Min Temperature: <span>{{ statistic['minTemperature'] }}</span></h1>
+  <hr />
+  <h1>Max Temperature: <span>{{ statistic['maxTemperature'] }}</span></h1>
+  <hr />
+  <h1>Humidity: <span>{{ statistic['humidity'] }}</span></h1>
+  <hr />
+  <h1>Pressure: <span>{{ statistic['pressure'] }}</span></h1>
+  <hr />
+  <h1>Created Time: <span>{{ statistic['createdAt'] }}</span></h1>
+  <hr />
+ 
+</article>
+<hr />
+{% endfor %}
+{% endblock %}

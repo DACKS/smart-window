@@ -7,9 +7,16 @@
     {% if g.user %}
       <li><span>{{ g.user['username'] }}</span>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+      <li><a href="{{ url_for('notification.index') }}">Notifications</a> </li>
+      <li><a href="/statistics">Statistics</a></li>
+      <li><a href="/intervals">Intervals</a></li>
+      <li><a href="/">Window</a> </li>
+
     {% else %}
+
       <li><a href="{{ url_for('auth.register') }}">Register</a>
       <li><a href="{{ url_for('auth.login') }}">Log In</a>
+
     {% endif %}
   </ul>
 </nav>
@@ -17,7 +24,5 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
+ 
   {% block content %}{% endblock %}
