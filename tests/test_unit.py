@@ -3,11 +3,15 @@ import tempfile
 import pytest
 import os
 import sys
+import json
+from datetime import date, datetime
 
 from __init__ import create_app
 from storage import db
 from storage.window_data import WindowData
 from flaskr import WindowStatus, humidity_threshold
+
+from controllers.interval import DATE_FORMAT
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
@@ -32,8 +36,11 @@ def client(app):
     return app.test_client()
 
 def authorize(client):
-    client.post('api/auth/register', data={'username': 'username', 'password': 'password'})
-    client.post('api/auth/login', data={'username': 'username', 'password': 'password'})
+
+    data = {'username': 'username', 'password': 'password'}
+
+    client.post('api/auth/register', json=data)
+    client.post('api/auth/login', json=data)
 
 # =================== DATABASE =================
 
@@ -187,3 +194,85 @@ def test_too_high_humidity(app):
 
 # =================== HTTP API =================
 
+def test_intervals(client):
+    authorize(client)
+    payload = {}
+    response = client.get('/api/intervals/', json=payload)
+    assert response.status_code == 200
+
+def test_intervals_create(client):
+    authorize(client)
+    payload = {
+        'name':'test_interval', 
+        'iStart':'2022-01-02 11:10:00',
+        'iEnd':'2022-01-03 11:10:00',
+        'luminosity':1.0}
+
+    response = client.post('/api/intervals/create', json=payload)
+    assert response.status_code == 200
+
+    assert response.json != None
+    assert 'message' in response.json
+    assert 'error' not in response.json
+
+    payload = {}
+
+    response = client.post('/api/intervals/create', json=payload)
+    assert response.status_code == 200
+
+    assert response.json != None
+    assert 'error' in response.json
+    assert 'message' not in response.json
+
+def test_intervals_update(client):
+
+    test_intervals_create(client)
+
+    response = client.get('/api/intervals/', json={})
+    id = json.loads(response.data)[0]['id']
+
+    authorize(client)
+
+    payload = {
+        'name':'test_interval2', 
+        'iStart':'2022-01-03 11:10:00',
+        'iEnd':'2022-01-04 11:10:00',
+        'luminosity':1.0}
+
+    response = client.post(f'/api/intervals/{id}/update', json=payload)
+    assert response.status_code == 200
+
+    assert response.json != None
+    assert 'message' in response.json
+    assert 'error' not in response.json
+
+def test_intervals_delete(client):
+
+    test_intervals_create(client)
+
+    response = client.get('/api/intervals/', json={})
+    id = json.loads(response.data)[0]['id']
+
+    authorize(client)
+
+    response = client.get(f'/api/intervals/{id}/delete')
+    assert response.status_code == 200
+
+    assert response.json != None
+    assert 'message' in response.json
+    assert 'error' not in response.json
+
+def test_notification_get(client):
+    authorize(client)
+    response = client.get('/api/notifications/')
+    assert response.status_code == 200
+
+def test_statistics_get(client):
+    authorize(client)
+    response = client.get('/api/statistics/')
+    assert response.status_code == 200
+
+def test_window_get(client):
+    authorize(client)
+    response = client.get('/api/window/')
+    assert response.status_code == 200
