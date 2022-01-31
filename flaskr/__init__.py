@@ -21,7 +21,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'db.sqlite'),
-        MQTT_BROKER_URL='0.0.0.0',
+        MQTT_BROKER_URL='localhost',
         MQTT_BROKER_PORT=1883,
         MQTT_USERNAME='',
         MQTT_PASSWORD='',
