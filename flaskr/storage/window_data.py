@@ -1,15 +1,8 @@
 import json
 import os
+from ..singleton_meta import SingletonMeta
 
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class WindowData(metaclass=Singleton):
+class WindowData(metaclass=SingletonMeta):
     MAX_OPEN_ANGLE = 90
     JSON_PATH = os.path.join(os.path.dirname(__file__), 'windows.json')
 
