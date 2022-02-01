@@ -2,12 +2,20 @@ asyncapi: '2.2.0'
 info:
   title: Smart Window messages
   version: 1.0.0
-  description: This service receives data about the status of the window.
+  description: This service sends data about the window status.
 channels:
   smart_window/outside_stats:
-    subscribe:
+    publish:
       message:
         $ref: '#/components/messages/weather_stats'
+  smart_window/inside_stats:
+    publish:
+      message:
+        $ref: '#/components/messages/weather_stats'
+  smart_window/notifications:
+    publish:
+      message:
+        $ref: '#/components/messages/notification_types'
 components:
   messages:
     weather_stats:
@@ -23,3 +31,7 @@ components:
           humidity:
             type: number
             description: The humidity
+    notification_types:
+      payload:
+        type: string
+        description: The description of the notification
