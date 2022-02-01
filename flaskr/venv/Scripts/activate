@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\Workspace\Visual Studio Code\Inginerie Software\smart-window\flaskr\venv"
+VIRTUAL_ENV="F:\facultate\facultate-licenta\facultate - anul 3\semestrul 1\Iginerie Software\proiect\smart-window\flaskr\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
