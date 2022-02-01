@@ -12,6 +12,7 @@ from flaskr import db
 from .storage.window_data import WindowData
 window = WindowData()
 
+window_time_open = 2.0
 window_update_interval = 0.1
 outside_stats_update_interval = 60.0
 inside_stats_update_interval = 10.0
@@ -19,6 +20,7 @@ notifications_update_interval = 10.0
 
 window_break_chance = 0.00001
 humidity_threshold = 30
+leave_come_chance = 0.5
 
 class CurrentStatistics:
 
@@ -37,6 +39,11 @@ class WindowStatus(metaclass=SingletonMeta):
 
         self.current_outside_stats = CurrentStatistics()
         self.current_inside_stats = CurrentStatistics()
+
+        self.isday = False
+        self.openAngle = 0.0
+        self.isLeave = True
+        self.timeEmplyHouse = datetime.datetime.now()
 
         self.app = None
 
@@ -151,6 +158,40 @@ class WindowStatus(metaclass=SingletonMeta):
             return True
         return False
 
+    def leave_or_come_home(self):
+        chance = random.random()
+
+        if chance < leave_come_chance:
+            return True
+
+
+        return False
+
+    def close_window(self):
+
+        if (window.openAngle > 0 and self.isLeave and (datetime.datetime.now()-self.timeEmplyHouse).seconds//60 >= window_time_open):
+            window.update_window_data(openAngle=0)
+
+            return True
+        return False
+
+
+    def interval(self):
+
+        with self.app.app_context():
+            my_db = db.get_db()
+            query_results = my_db.execute(f"SELECT iStart, iEnd FROM interval ").fetchall()
+            for result in query_results:
+
+                if self.isday is False and datetime.datetime.now()>=result["iStart"] and datetime.datetime.now()<=result["iEnd"]:
+                    self.isday = True
+                    return True
+                elif self.isday and datetime.datetime.now()<result["iStart"] or datetime.datetime.now()>result["iEnd"]:
+                    self.isday = False
+                    return True
+
+        return False
+
     def update_notifications(self):
 
         
@@ -172,6 +213,32 @@ class WindowStatus(metaclass=SingletonMeta):
             notif_type = 1
             notification_content += humidity_check
 
+        if self.close_window():
+            notif_type = 4
+            notification_content += "The window closed automatically."
+
+
+        if self.leave_or_come_home():
+            if self.isLeave is False :
+                notif_type = 2
+                notification_content += "The owner leave the house."
+                self.isLeave = True
+                self.timeEmplyHouse =  datetime.datetime.now()
+
+            else:
+                notif_type = 3
+
+                self.isLeave = False
+                self.timeEmplyHouse = datetime.datetime.now()
+
+
+        if self.interval():
+            if self.isday:
+                notif_type = 5
+                notification_content += "Window opacity is 100."
+            else:
+                notif_type = 6
+                notification_content += "Window opacity is 30."
 
         if notif_type == -1:
             return
