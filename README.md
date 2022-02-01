@@ -75,3 +75,6 @@ Unit tests (run from the smart-window folder)
 
 Install AsyncAPI
 ```npm install -g @asyncapi/generator```
+
+Generate AsyncAPI documentation
+```ag window.yml @asyncapi/html-template -o output```
