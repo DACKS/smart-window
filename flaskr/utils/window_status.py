@@ -5,11 +5,11 @@ import math
 import random
 from re import S
 import requests
-from flaskr.singleton_meta import SingletonMeta
-from flaskr.status_api import StatusApi
+from flaskr.utils.singleton_meta import SingletonMeta
+from flaskr.utils.status_api import StatusApi
 from flaskr import db
 
-from .storage.window_data import WindowData
+from flaskr.storage.window_data import WindowData
 window = WindowData()
 
 window_time_open = 2.0

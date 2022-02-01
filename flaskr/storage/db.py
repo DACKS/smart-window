@@ -26,10 +26,10 @@ def close_db(e=None):
 def init_db():
     db = get_db()
 
-    with open('./flaskr/scheme.sql', encoding='utf8') as f:
+    with open('./flaskr/storage/scheme.sql', encoding='utf8') as f:
         db.executescript(f.read())
 
-    with open('./flaskr/default_values.sql', encoding='utf8') as f:
+    with open('./flaskr/storage/default_values.sql', encoding='utf8') as f:
         db.executescript(f.read())
 
 @click.command('init-db')

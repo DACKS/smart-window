@@ -11,11 +11,9 @@ from flaskr.controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
-from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
-
-from flaskr.window_status import *
-from flaskr.status_api import StatusApi
+from flaskr.utils.window_status import *
+from flaskr.utils.status_api import StatusApi
 
 def create_app(testing=False, db_path=None):
     # create and configure the app
