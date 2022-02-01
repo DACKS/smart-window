@@ -13,10 +13,11 @@ from flaskr.storage.window_data import WindowData
 window = WindowData()
 
 window_time_open = 2.0
-window_update_interval = 0.1
+window_update_interval = 1.0
 outside_stats_update_interval = 60.0
 inside_stats_update_interval = 10.0
 notifications_update_interval = 10.0
+window_data_update_interval = 60.0
 
 window_break_chance = 0.00001
 humidity_threshold = 30
@@ -29,16 +30,17 @@ class CurrentStatistics:
         self.pressure = 0
         self.humidity = 0
 
-
 class WindowStatus(metaclass=SingletonMeta):
     
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
         self.accumulated_inside_update_time = 0.0
         self.accumulated_notifications_update_time = 0.0
+        self.accumulated_window_data_update_time = 0.0
 
         self.current_outside_stats = CurrentStatistics()
         self.current_inside_stats = CurrentStatistics()
+        self.luminosity = WindowData().luminosity
 
         self.isday = False
         self.openAngle = 0.0
@@ -54,6 +56,7 @@ class WindowStatus(metaclass=SingletonMeta):
         self.update_outside_stats()
         self.update_inside_stats()
         self.update_notifications()
+        self.update_window_data()
 
     def update_outside_stats(self):
         self.accumulated_outside_update_time += window_update_interval
@@ -257,3 +260,22 @@ class WindowStatus(metaclass=SingletonMeta):
 
                 my_db.execute(f"INSERT INTO swNotification (content, typeID, createdAt) VALUES ('{notification_content}', {notif_type}, CURRENT_TIMESTAMP)")
                 my_db.commit()
+
+    def update_window_data(self):
+    
+        
+        self.accumulated_window_data_update_time += window_update_interval
+        if self.accumulated_window_data_update_time < window_data_update_interval:
+            return
+
+        self.accumulated_window_data_update_time -= window_data_update_interval
+
+        StatusApi().publish_window_data()
+
+        if self.luminosity != WindowData().luminosity:
+            self.luminosity = WindowData().luminosity
+            notification_content =f"Window luminosity is set to {self.luminosity}"
+            StatusApi().publish_notification(notification_content)
+        
+
+

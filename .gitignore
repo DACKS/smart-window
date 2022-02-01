@@ -2,6 +2,7 @@ flaskr/lib
 flaskr/bin
 flaskr/venv
 flaskr/__pycache__
+flaskr/__init__.pyc
 flaskr/controllers/__pycache__
 flaskr/storage/__pycache__
 flaskr/Scripts/

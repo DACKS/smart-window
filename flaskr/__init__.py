@@ -14,6 +14,7 @@ from flask_apscheduler import APScheduler
 from flask_swagger_ui import get_swaggerui_blueprint
 from flaskr.utils.window_status import *
 from flaskr.utils.status_api import StatusApi
+from flaskr.storage.window_data import WindowData
 
 def create_app(testing=False, db_path=None):
     # create and configure the app
@@ -83,7 +84,11 @@ def create_app(testing=False, db_path=None):
     window = WindowStatus()
     window.init_app(app)
 
+    # Status and notification thread
     scheduler.add_job('window_update', window.update, args=[], trigger="interval", seconds=window_update_interval)
+
+    # Interval luminosity checking thread
+    scheduler.add_job('check-intervals', WindowData.check_luminosity, args=[app, db], trigger="interval", seconds=1)
 
     return app
     

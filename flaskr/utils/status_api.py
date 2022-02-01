@@ -1,6 +1,7 @@
 from tokenize import Single
 from flaskr.utils.singleton_meta import SingletonMeta
 import json
+from flaskr.storage.window_data import WindowData
 
 class StatusApi(metaclass=SingletonMeta):
 
@@ -18,3 +19,6 @@ class StatusApi(metaclass=SingletonMeta):
 
     def publish_notification(self, notification_description):
         self.mqtt_client.publish("smart_window/notifications", notification_description)
+
+    def publish_window_data(self):
+        self.mqtt_client.publish("smart_window/window_data", str(json.dumps(WindowData().get_dict())))
