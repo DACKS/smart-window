@@ -1,6 +1,6 @@
 import json
 import os
-from flaskr.singleton_meta import SingletonMeta
+from flaskr.utils.singleton_meta import SingletonMeta
 from pathlib import Path
 
 class WindowData(metaclass=SingletonMeta):
