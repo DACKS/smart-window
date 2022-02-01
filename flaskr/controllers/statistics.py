@@ -48,9 +48,9 @@ def api_index():
             stat['maxTemperature'] = round(stat['maxTemperature'], 2)
             stat['humidity'] = round(stat['humidity'], 2)
             stat['pressure'] = round(stat['pressure'], 2)
-        return json.dumps(stats, default=str)
+        return json.dumps(stats, default=str), 200
     except:
-        return jsonify({'error': 'An error occured related to database...'})
+        return jsonify({'error': 'An error occured related to database...'}), 500
 
 # @bp.route('/create', methods=('POST',))
 # @auth.login_required

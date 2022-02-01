@@ -54,26 +54,26 @@ def api_update():
     try:
         name = request.json['name']
     except:
-        return jsonify({'error': 'name is missing...'})
+        return jsonify({'error': 'name is missing...'}), 400
     try:
         openDirection = request.json['openDirection']
         if openDirection != 'left' and openDirection != 'right':
             raise ValueError
     except ValueError:
-        return jsonify({'error': 'openDirection must be left or right...'})
+        return jsonify({'error': 'openDirection must be left or right...'}), 400
     except:
-        return jsonify({'error': 'openDirection is missing...'})
+        return jsonify({'error': 'openDirection is missing...'}), 400
     try:
         openAngle = request.json['openAngle']
         if type(openAngle) != float or openAngle < 0 or openAngle > 90:
             raise ValueError
     except ValueError:
-        return jsonify({'error': 'openAngle should be a float between 0 and 90...'}) 
+        return jsonify({'error': 'openAngle should be a float between 0 and 90...'}), 400 
     except:
-        return jsonify({'error': 'openAngle is missing...'})
+        return jsonify({'error': 'openAngle is missing...'}), 400
 
     window.update_window_data(name, openDirection, openAngle)
         
-    return jsonify({'message': 'Window data has been updated with success!'})
+    return jsonify({'message': 'Window data has been updated with success!'}), 200
 
 

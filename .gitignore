@@ -7,5 +7,7 @@ flaskr/storage/__pycache__
 flaskr/Scripts/
 flaskr/flaskr.egg-info/
 flaskr/false
+flaskr/MANIFEST.in
+flaskr/pyvenv.cfg
 instance/db.sqlite
 instance

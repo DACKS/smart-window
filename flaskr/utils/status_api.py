@@ -1,5 +1,5 @@
 from tokenize import Single
-from flaskr.singleton_meta import SingletonMeta
+from flaskr.utils.singleton_meta import SingletonMeta
 import json
 
 class StatusApi(metaclass=SingletonMeta):
