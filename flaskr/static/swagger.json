@@ -55,7 +55,10 @@
           ],
           "responses": {
             "200": {
-              "description": "OK"
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/messageErrorOutput"
+              }
             }
           }
         }
@@ -84,7 +87,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -101,7 +107,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -118,7 +127,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -146,7 +158,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -183,7 +198,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -209,7 +227,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -226,7 +247,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -243,7 +267,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -260,7 +287,10 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK"
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }
                 }
             }
             }
@@ -269,6 +299,21 @@
     },
     "components": {
       "schemas": {
+
+        "messageErrorOutput": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "format": "string"
+              },
+              "message": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+
         "registerRequestPostBody": {
           "type": "object",
           "properties": {
