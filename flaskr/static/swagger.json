@@ -388,7 +388,7 @@
             },
             "openDirection": {
               "type": "string",
-              "example": "left"
+              "example": ["left", "right"]
             },
             "openAngle": {
               "type": "float",
