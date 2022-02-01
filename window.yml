@@ -1,22 +1,25 @@
 asyncapi: '2.2.0'
 info:
-  title: Water Service
+  title: Smart Window messages
   version: 1.0.0
-  description: This service is in charge of telling the pump when to water.
+  description: This service receives data about the status of the window.
 channels:
-  python/mqtt:
-    publish:
+  smart_window/outside_stats:
+    subscribe:
       message:
-        $ref: '#/components/messages/water_status'
+        $ref: '#/components/messages/weather_stats'
 components:
   messages:
-    water_status:
+    weather_stats:
       payload:
         type: object
         properties:
-          water:
-            type: boolean
-            description: Boolean value if to water or not
-          qty:
+          temp_c:
             type: number
-            description: The quantity of the water
+            description: Number representing the temperature in Celsius degrees
+          pressure:
+            type: number
+            description: The atmospheric pressure
+          humidity:
+            type: number
+            description: The humidity
