@@ -276,3 +276,14 @@ def test_window_get(client):
     authorize(client)
     response = client.get('/api/window/')
     assert response.status_code == 200
+
+def test_window_update(client):
+    authorize(client)
+    payload = {
+        'name': 'test_name',
+        'openDirection': 'left',
+        'openAngle': 10.2
+    }
+
+    response = client.post('/api/window/update', json=payload)
+    assert response.status_code == 200

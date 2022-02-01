@@ -59,6 +59,15 @@ def test_integration(app, client):
         reponse = client.get('api/window/')
         assert response.status_code == 200
 
+        # Update window data
+        test_window = {
+            'name': 'test_name',
+            'openDirection': 'left',
+            'openAngle': 10.2
+        }
+        response = client.post('api/window/update', json=test_window)
+        assert response.status_code == 200
+
         # Get intervals
         respoonse = client.get('api/intervals/')
         assert response.status_code == 200

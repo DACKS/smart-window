@@ -1,5 +1,6 @@
 import functools
 from os import name
+from signal import raise_signal
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, abort, jsonify
@@ -36,17 +37,43 @@ def update():
         openDirection = request.form['opendirection']
 
         openAngle = request.form['openangle']
-       
-
-        integrity = request.form['integrity']
 
         if error is not None:
             flash(error)
         else:
-            window.update_window_data(name, openDirection, openAngle, integrity)
+            window.update_window_data(name, openDirection, openAngle)
             
             return redirect(url_for('window.index'))
 
     return render_template('window/update.html')
+
+@bp_api.route('/update', methods=( 'POST', ))
+@auth.login_required
+def api_update():
+
+    try:
+        name = request.json['name']
+    except:
+        return jsonify({'error': 'name is missing...'})
+    try:
+        openDirection = request.json['openDirection']
+        if openDirection != 'left' and openDirection != 'right':
+            raise ValueError
+    except ValueError:
+        return jsonify({'error': 'openDirection must be left or right...'})
+    except:
+        return jsonify({'error': 'openDirection is missing...'})
+    try:
+        openAngle = request.json['openAngle']
+        if type(openAngle) != float or openAngle < 0 or openAngle > 90:
+            raise ValueError
+    except ValueError:
+        return jsonify({'error': 'openAngle should be a float between 0 and 90...'}) 
+    except:
+        return jsonify({'error': 'openAngle is missing...'})
+
+    window.update_window_data(name, openDirection, openAngle)
+        
+    return jsonify({'message': 'Window data has been updated with success!'})
 
 

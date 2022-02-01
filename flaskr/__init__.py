@@ -11,9 +11,7 @@ from flaskr.controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
-from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
-
 from flaskr.window_status import *
 from flaskr.status_api import StatusApi
 
