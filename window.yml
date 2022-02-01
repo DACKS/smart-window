@@ -1,0 +1,22 @@
+asyncapi: '2.2.0'
+info:
+  title: Water Service
+  version: 1.0.0
+  description: This service is in charge of telling the pump when to water.
+channels:
+  python/mqtt:
+    publish:
+      message:
+        $ref: '#/components/messages/water_status'
+components:
+  messages:
+    water_status:
+      payload:
+        type: object
+        properties:
+          water:
+            type: boolean
+            description: Boolean value if to water or not
+          qty:
+            type: number
+            description: The quantity of the water

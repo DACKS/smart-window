@@ -72,3 +72,6 @@ Run
 
 Unit tests (run from the smart-window folder)
 ```python -m pytest ./tests```
+
+Install AsyncAPI
+```npm install -g @asyncapi/generator```
