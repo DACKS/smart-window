@@ -1,0 +1,312 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "",
+      "version": "1.0.0",
+      "title": "Smart Window API OpenAPI Documentation"
+    },
+    "servers": [
+      {
+        "url": "/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Authentification Request",
+        "description": "API usage for authentification"
+      },
+      {
+        "name": "Interval Request",
+        "description": "API usage for working with intervals"
+      },
+      {
+        "name": "Notification Request",
+        "description": "API usage for working with notifications"
+      },
+      {
+        "name": "Statistics Request",
+        "description": "API usage for working with statistics"
+      },
+      {
+        "name": "Window Request",
+        "description": "API usage for working with the window"
+      }
+    ],
+    "paths": {
+      "/api/auth/register": {
+        "post": {
+          "tags": [
+            "Authentification Request"
+          ],
+          "summary": "Registers a new user",
+          "requestBody": {
+            "description": "Must contain the username and password",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerRequestPostBody"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+
+
+        "/api/auth/login": {
+            "post": {
+            "tags": [
+                "Authentification Request"
+            ],
+            "summary": "Log in for an existing user",
+            "requestBody": {
+                "description": "Must contain the username and password",
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/registerRequestPostBody"
+                    }
+                }
+                }
+            },
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/auth/logout": {
+            "get": {
+            "tags": [
+                "Authentification Request"
+            ],
+            "summary": "Terminates the session for an authentificated user",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/intervals/": {
+            "get": {
+            "tags": [
+                "Interval Request"
+            ],
+            "summary": "Returns the existing intervals that were created",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/intervals/create": {
+            "post": {
+            "tags": [
+                "Interval Request"
+            ],
+            "summary": "Creates a new interval for changing the opacity",
+            "requestBody": {
+                "description": "Must contain the name of the interval, the start timestamp, the end timestamp and the luminosity",
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/intervalCreateRequestPostBody"
+                    }
+                }
+                }
+            },
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/intervals/{id}/update": {
+            "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "description": "ID of the interval that we want to match",
+                  "type": "integer"
+                }
+              ],
+            "post": {
+            "tags": [
+                "Interval Request"
+            ],
+            "summary": "Updates an existing interval",
+            "requestBody": {
+                "description": "Must contain the name of the interval, the start timestamp, the end timestamp and the luminosity",
+                "required": true,
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "$ref": "#/components/schemas/intervalCreateRequestPostBody"
+                    }
+                }
+                }
+            },
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/intervals/{id}/delete": {
+            "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "description": "ID of the interval that we want to match",
+                  "type": "integer"
+                }
+              ],
+            "get": {
+            "tags": [
+                "Interval Request"
+            ],
+            "summary": "Deletes an existing interval",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/statistics": {
+            "get": {
+            "tags": [
+                "Statistics Request"
+            ],
+            "summary": "Returns the statistics collected by the window",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/notifications": {
+            "get": {
+            "tags": [
+                "Notification Request"
+            ],
+            "summary": "Returns the previous notifications",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        },
+
+        "/api/window": {
+            "get": {
+            "tags": [
+                "Window Request"
+            ],
+            "summary": "Returns info about the window",
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                "description": "OK"
+                }
+            }
+            }
+        }
+
+    },
+    "components": {
+      "schemas": {
+        "registerRequestPostBody": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "format": "string"
+            },
+            "password": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+
+        "intervalCreateRequestPostBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "iStart": {
+                "type": "string",
+                "pattern": "string",
+                "example": "2022-01-03 11:10:00"
+              },
+              "iEnd": {
+                "type": "string",
+                "pattern": "string",
+                "example": "2022-01-04 11:10:00"
+              },
+              "luminosity": {
+                  "type": "double",
+                  "example":100.0
+              }
+            }
+          }
+
+      }
+    }
+  }

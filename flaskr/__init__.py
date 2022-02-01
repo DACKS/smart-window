@@ -11,6 +11,8 @@ from flaskr.controllers import window as win
 from flask import Flask
 from flask_mqtt import Mqtt
 from flask_apscheduler import APScheduler
+from flask_swagger import swagger
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from flaskr.window_status import *
 from flaskr.status_api import StatusApi
@@ -46,6 +48,16 @@ def create_app(testing=False, db_path=None):
     
     db.init_app(app)
 
+    SWAGGER_URL = '/api/docs'
+    API_URL = '/static/swagger.json'
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config = { 'title': "Smart Window" }
+    )
+
+    app.register_blueprint(swaggerui_blueprint)
     app.register_blueprint(auth.bp)
     app.register_blueprint(auth.bp_api)
     app.register_blueprint(interval.bp)

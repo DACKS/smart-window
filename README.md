@@ -43,7 +43,7 @@ pip install flask
 ```
 
 ```
-pip install flask_mqtt flask_socketio eventlet APScheduler flask_apscheduler requests pytest
+pip install flask_mqtt flask_socketio eventlet APScheduler flask_apscheduler requests pytest flask_swagger flask_swagger_ui
 ```
 
 Set environment value for development: export ```FLASK_ENV=development```
