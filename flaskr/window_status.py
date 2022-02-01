@@ -142,7 +142,7 @@ class WindowStatus(metaclass=SingletonMeta):
                 pressure = stats_object.pressure
 
                 my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior={isExteriorBit}")
-
+            
             my_db.commit()
 
 
@@ -180,14 +180,18 @@ class WindowStatus(metaclass=SingletonMeta):
 
         with self.app.app_context():
             my_db = db.get_db()
-            query_results = my_db.execute(f"SELECT iStart, iEnd FROM interval ").fetchall()
+            query_results = my_db.execute(f"SELECT * FROM interval ").fetchall()
             for result in query_results:
-
+                id = result["id"]
                 if self.isday is False and datetime.datetime.now()>=result["iStart"] and datetime.datetime.now()<=result["iEnd"]:
                     self.isday = True
+                    my_db.execute(f"UPDATE interval SET  luminosity = 100 WHERE id={id}")
+                    my_db.commit()
                     return True
                 elif self.isday and datetime.datetime.now()<result["iStart"] or datetime.datetime.now()>result["iEnd"]:
                     self.isday = False
+                    my_db.execute(f"UPDATE interval SET  luminosity = 30 WHERE id={id}")
+                    my_db.commit()
                     return True
 
         return False
@@ -227,7 +231,6 @@ class WindowStatus(metaclass=SingletonMeta):
 
             else:
                 notif_type = 3
-
                 self.isLeave = False
                 self.timeEmplyHouse = datetime.datetime.now()
 
@@ -235,10 +238,10 @@ class WindowStatus(metaclass=SingletonMeta):
         if self.interval():
             if self.isday:
                 notif_type = 5
-                notification_content += "Window opacity is 100."
+                notification_content += "Window luminosity is 100."
             else:
                 notif_type = 6
-                notification_content += "Window opacity is 30."
+                notification_content += "Window luminosity is 30."
 
         if notif_type == -1:
             return
