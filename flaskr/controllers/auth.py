@@ -2,7 +2,7 @@ import functools
 import json
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, current_app, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -59,7 +59,7 @@ def api_register():
         )
         my_db.commit()
         return jsonify({'message': 'You have registered. Login with POST api/auth/login'}), 201
-    except:
+    except BaseException as err:
         return jsonify({'error': f"User {username} is already registered."}), 403
         
 

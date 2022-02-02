@@ -209,7 +209,7 @@ def test_intervals_create(client):
         'luminosity':1.0}
 
     response = client.post('/api/intervals/create', json=payload)
-    assert response.status_code == 200
+    assert response.status_code == 201
 
     assert response.json != None
     assert 'message' in response.json
@@ -218,7 +218,7 @@ def test_intervals_create(client):
     payload = {}
 
     response = client.post('/api/intervals/create', json=payload)
-    assert response.status_code == 200
+    assert response.status_code == 400
 
     assert response.json != None
     assert 'error' in response.json
