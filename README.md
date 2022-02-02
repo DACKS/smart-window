@@ -1,5 +1,16 @@
 # Smart Window
 
+# About
+
+This application is meant to be used for an IOT device which represents a smart window.
+The key features of this application (selling points):
+
+* Gives the user statistics about the inside and outside weather conditions
+* Allows the user to set time intervals where the window would change the anount of light that it allows to go through
+* Gives the user notifications about the events that may occur to the window/ house
+* Allows multiple users to operate it.
+* Detects when it needs to be opened/ closed based on the inside/ outside weather conditions.
+
 # Installation
 
 Prior to installation, you should have ```python 3``` and ```pip``` installed.
@@ -81,6 +92,8 @@ pytest ./tests
 [How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.docx)
 
 [Database diagram](https://github.com/DACKS/smart-window/blob/main/dbdiagram.pdf)
+
+The data about the window is stored in a ```.json``` file, as the application is accountable for just one window, so there is no need for a table in the database.
 
 For the HTTP endpoints documentation, you need to run the application, and access ```http://127.0.0.1:5000/api/docs```
 
