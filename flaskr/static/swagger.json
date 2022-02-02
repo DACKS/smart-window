@@ -115,7 +115,6 @@
             }
             }
         },
-
         "/api/intervals/": {
             "get": {
             "tags": [
@@ -178,32 +177,32 @@
                 }
               ],
             "post": {
-            "tags": [
-                "Interval Request"
-            ],
-            "summary": "Updates an existing interval",
-            "requestBody": {
-                "description": "Must contain the name of the interval, the start timestamp, the end timestamp and the luminosity",
-                "required": true,
-                "content": {
-                "application/json": {
-                    "schema": {
-                    "$ref": "#/components/schemas/intervalCreateRequestPostBody"
-                    }
-                }
-                }
-            },
-            "produces": [
-                "application/json"
-            ],
-            "responses": {
-                "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/messageErrorOutput"
-                }
-                }
-            }
+              "tags": [
+                  "Interval Request"
+              ],
+              "summary": "Updates an existing interval",
+              "requestBody": {
+                  "description": "Must contain the name of the interval, the start timestamp, the end timestamp and the luminosity",
+                  "required": true,
+                  "content": {
+                  "application/json": {
+                      "schema": {
+                      "$ref": "#/components/schemas/intervalCreateRequestPostBody"
+                      }
+                  }
+                  }
+              },
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                  "description": "OK",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  }
+              }
             }
         },
 
@@ -294,8 +293,37 @@
                 }
             }
             }
+        },
+        "/api/window/update": {
+          "post": {
+            "tags": [
+              "Window Request"
+            ],
+            "summary": "Updates window data",
+              "requestBody": {
+                  "description": "Must contain the new name of the window, the open direction and the open angle",
+                  "required": true,
+                  "content": {
+                  "application/json": {
+                      "schema": {
+                      "$ref": "#/components/schemas/windowUpdateRequestPostBody"
+                      }
+                  }
+                  }
+              },
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                  "description": "OK",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                }
+              }
+          }
         }
-
     },
     "components": {
       "schemas": {
@@ -329,28 +357,45 @@
         },
 
         "intervalCreateRequestPostBody": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "format": "string"
-              },
-              "iStart": {
-                "type": "string",
-                "pattern": "string",
-                "example": "2022-01-03 11:10:00"
-              },
-              "iEnd": {
-                "type": "string",
-                "pattern": "string",
-                "example": "2022-01-04 11:10:00"
-              },
-              "luminosity": {
-                  "type": "double",
-                  "example":100.0
-              }
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "iStart": {
+              "type": "string",
+              "pattern": "string",
+              "example": "2022-01-03 11:10:00"
+            },
+            "iEnd": {
+              "type": "string",
+              "pattern": "string",
+              "example": "2022-01-04 11:10:00"
+            },
+            "luminosity": {
+                "type": "double",
+                "example":100.0
             }
           }
+        },
+        "windowUpdateRequestPostBody": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "openDirection": {
+              "type": "string",
+              "example": ["left", "right"]
+            },
+            "openAngle": {
+              "type": "float",
+              "example": "10.2"
+            }
+          }
+        }
 
       }
     }

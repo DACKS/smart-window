@@ -41,7 +41,7 @@ def test_integration(app, client):
 
         # Register
         response = client.post('api/auth/register', json={'username': 'test_username', 'password': 'test_password'})
-        assert response.status_code == 200
+        assert response.status_code == 201 or response.status_code == 403 
 
         # Login
         response = client.post('api/auth/login', json={'username': 'test_username', 'password': 'test_password'})
@@ -59,6 +59,15 @@ def test_integration(app, client):
         reponse = client.get('api/window/')
         assert response.status_code == 200
 
+        # Update window data
+        test_window = {
+            'name': 'test_name',
+            'openDirection': 'left',
+            'openAngle': 10.2
+        }
+        response = client.post('api/window/update', json=test_window)
+        assert response.status_code == 200
+
         # Get intervals
         respoonse = client.get('api/intervals/')
         assert response.status_code == 200
@@ -71,7 +80,7 @@ def test_integration(app, client):
             "luminosity": 10
         }
         response = client.post('api/intervals/create', json=test_interval)
-        assert response.status_code == 200
+        assert response.status_code == 201
 
         # Update an interval
         response = client.get('api/intervals/')

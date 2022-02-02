@@ -2,7 +2,7 @@ import functools
 import json
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, current_app, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -41,15 +41,16 @@ def register():
 
 @bp_api.route('/register', methods=['POST'])
 def api_register():
-    username = request.json['username']
-    password = request.json['password']
+    
     my_db = db.get_db()
-    error = None
-
-    if not username:
-        return jsonify({'error': 'Username is required.'})
-    elif not password:
-        return jsonify({'error': 'Password is required.'})
+    try:
+        username = request.json['username']
+    except:
+        return jsonify({'error': 'Username is required.'}), 400
+    try:
+        password = request.json['password']
+    except:
+        return jsonify({'error': 'Password is required.'}), 400
 
     try:
         my_db.execute(
@@ -57,9 +58,9 @@ def api_register():
             (username, generate_password_hash(password))
         )
         my_db.commit()
-        return jsonify({'message': 'You have registered. Login with POST api/auth/login'})
-    except:
-        return jsonify({'error': f"User {username} is already registered."})
+        return jsonify({'message': 'You have registered. Login with POST api/auth/login'}), 201
+    except BaseException as err:
+        return jsonify({'error': f"User {username} is already registered."}), 403
         
 
 
@@ -91,26 +92,29 @@ def login():
 
 @bp_api.route('/login', methods=['POST'])
 def api_login():
-    username = request.json.get('username')
-    password = request.json.get('password')
+    try:
+        username = request.json['username']
+    except:
+        return jsonify({'error': 'Username is required.'}), 400
+    try:
+        password = request.json['password']
+    except:
+        return jsonify({'error': 'Password is required.'}), 400
 
     my_db = db.get_db()
-    error = None
     user = my_db.execute(
         'SELECT * FROM user WHERE username = ?', (username,)
     ).fetchone()
 
     if user is None:
-        error = 'Incorrect username.'
+        return jsonify({'error': f"Incorrect username."}), 403
     elif not check_password_hash(user['password'], password):
-        error = 'Incorrect password.'
+        return jsonify({'error': f"Incorrect password."}), 403
 
-    if error is None:
-        session.clear()
-        session['user_id'] = user['id']
-        return jsonify({'message': f" {user['username']} logged in with success"})
+    session.clear()
+    session['user_id'] = user['id']
+    return jsonify({'message': f" {user['username']} logged in with success"}), 200
 
-    return jsonify({'error': error})
 
 
 
@@ -131,10 +135,10 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@bp_api.route('/logout')
+@bp_api.route('/logout', methods=['GET', 'POST'])
 def api_logout():
     session.clear()
-    return jsonify({'message': 'Session cleared.'})
+    return jsonify({'message': 'Session cleared.'}), 200
 
 
 def login_required(view):
@@ -142,7 +146,7 @@ def login_required(view):
     def wrapped_view(**kwargs):
         if g.user is None:
             if request.path.split('/')[1] == 'api':
-                return jsonify({'message': 'you have to login with POST api/auth/login'}) 
+                return jsonify({'message': 'you have to login with POST api/auth/login'}), 401 
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)

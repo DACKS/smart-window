@@ -209,7 +209,7 @@ def test_intervals_create(client):
         'luminosity':1.0}
 
     response = client.post('/api/intervals/create', json=payload)
-    assert response.status_code == 200
+    assert response.status_code == 201
 
     assert response.json != None
     assert 'message' in response.json
@@ -218,7 +218,7 @@ def test_intervals_create(client):
     payload = {}
 
     response = client.post('/api/intervals/create', json=payload)
-    assert response.status_code == 200
+    assert response.status_code == 400
 
     assert response.json != None
     assert 'error' in response.json
@@ -275,4 +275,15 @@ def test_statistics_get(client):
 def test_window_get(client):
     authorize(client)
     response = client.get('/api/window/')
+    assert response.status_code == 200
+
+def test_window_update(client):
+    authorize(client)
+    payload = {
+        'name': 'test_name',
+        'openDirection': 'left',
+        'openAngle': 10.2
+    }
+
+    response = client.post('/api/window/update', json=payload)
     assert response.status_code == 200

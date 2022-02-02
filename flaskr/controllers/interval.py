@@ -35,9 +35,9 @@ def api_index():
             ' FROM interval'
             ' ORDER BY createdAt DESC'
         ).fetchall()
-        return json.dumps( [dict(interval) for interval in intervals], default=str)
+        return json.dumps( [dict(interval) for interval in intervals], default=str), 200
     except:
-        return jsonify({'error': 'An error occured related to database...'})
+        return jsonify({'error': 'An error occured related to database...'}), 500
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -79,29 +79,29 @@ def api_create():
     try:
         name = request.json['name']
     except:
-        return jsonify({'error': 'name is missing...'})
+        return jsonify({'error': 'name is missing...'}), 400
     try:
         iStart = request.json['iStart']
     except:
-        return jsonify({'error': 'iStart is missing...'})
+        return jsonify({'error': 'iStart is missing...'}), 400
     try:
         iEnd = request.json['iEnd']
     except:
-        return jsonify({'error': 'iEnd is missing...'})
+        return jsonify({'error': 'iEnd is missing...'}), 400
     try:
         luminosity = request.json['luminosity']
     except:
-        return jsonify({'error': 'luminosity is missing...'})
+        return jsonify({'error': 'luminosity is missing...'}), 400
 
     try: 
         iStart = datetime.strptime(iStart, DATE_FORMAT)
     except:
-        return jsonify({'error': 'iStart is not formatted properly...'})
+        return jsonify({'error': 'iStart is not formatted properly...'}), 400
 
     try: 
         iEnd = datetime.strptime(iEnd, DATE_FORMAT)
     except:
-        return jsonify({'error': 'iEnd is not formatted properly...'})
+        return jsonify({'error': 'iEnd is not formatted properly...'}), 400
 
     try:
         my_db = db.get_db()
@@ -111,9 +111,9 @@ def api_create():
             (name, iStart, iEnd, luminosity)
         )
         my_db.commit()
-        return jsonify({'message': 'Interval has been created with success!'})
+        return jsonify({'message': 'Interval has been created with success!'}), 201
     except:
-        return jsonify({'error': 'An error occured related to database...'})
+        return jsonify({'error': 'An error occured related to database...'}), 500
 
 
 def get_interval(id, from_api=False):
@@ -171,56 +171,55 @@ def update(id):
 @auth.login_required
 def api_update(id):
     interval = get_interval(id, from_api=True)
+    if interval is None:
+        return jsonify({'error': 'invalid id...'}), 400
+    try:
+        name = request.json['name']
+    except:
+        return jsonify({'error': 'name is missing...'}), 400
+    try:
+        iStart = request.json['iStart']
+    except:
+        return jsonify({'error': 'iStart is missing...'}), 400
+    try:
+        iEnd = request.json['iEnd']
+    except:
+        return jsonify({'error': 'iEnd is missing...'}), 400
+    try:
+        luminosity = request.json['luminosity']
+    except:
+        return jsonify({'error': 'luminosity is missing...'}), 400
 
-    if request.method == 'POST':
-          
-        try:
-            name = request.json['name']
-        except:
-            return jsonify({'error': 'name is missing...'})
-        try:
-            iStart = request.json['iStart']
-        except:
-            return jsonify({'error': 'iStart is missing...'})
-        try:
-            iEnd = request.json['iEnd']
-        except:
-            return jsonify({'error': 'iEnd is missing...'})
-        try:
-            luminosity = request.json['luminosity']
-        except:
-            return jsonify({'error': 'luminosity is missing...'})
+    try: 
+        iStart = datetime.strptime(iStart, DATE_FORMAT)
+    except:
+        return jsonify({'error': 'iStart is not formatted properly...'}), 400
 
-        try: 
-            iStart = datetime.strptime(iStart, DATE_FORMAT)
-        except:
-            return jsonify({'error': 'iStart is not formatted properly...'})
+    try: 
+        iEnd = datetime.strptime(iEnd, DATE_FORMAT)
+    except:
+        return jsonify({'error': 'iEnd is not formatted properly...'}), 400
 
-        try: 
-            iEnd = datetime.strptime(iEnd, DATE_FORMAT)
-        except:
-            return jsonify({'error': 'iEnd is not formatted properly...'})
-
-        
-        try: 
-            my_db = db.get_db()
-            my_db.execute(
-                'UPDATE interval SET'
-                '   name = ?,'
-                '   iStart = ?,'
-                '   iEnd = ?,'
-                '   luminosity = ?'
-                ' WHERE id = ?',
-                (name, iStart, iEnd, luminosity, id)
-            )
-            my_db.commit()
-            return jsonify({'message': f'Interval {id} was updated with success!'})
-        except:
-            return jsonify({'error': 'An error occured related to database...'})
-
+    
+    try: 
+        my_db = db.get_db()
+        my_db.execute(
+            'UPDATE interval SET'
+            '   name = ?,'
+            '   iStart = ?,'
+            '   iEnd = ?,'
+            '   luminosity = ?'
+            ' WHERE id = ?',
+            (name, iStart, iEnd, luminosity, id)
+        )
+        my_db.commit()
+        return jsonify({'message': f'Interval {id} was updated with success!'}), 200
+    except:
+        return jsonify({'error': 'An error occured related to database...'}), 500
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+
+@bp.route('/<int:id>/delete', methods=('POST','GET'))
 @auth.login_required
 def delete(id):
     my_db = db.get_db()
@@ -233,11 +232,11 @@ def delete(id):
 def api_delete(id):
     interval = get_interval(id, from_api=True)
     if interval is None:
-        return jsonify({'error': f'There is no interval with id {id}'})
+        return jsonify({'error': f'There is no interval with id {id}'}), 400
     try:
         my_db = db.get_db()
         my_db.execute('DELETE FROM interval WHERE id = ?', (id,))
         my_db.commit()
-        return jsonify({'message': f'Inteval {id} has been deleted with success!'})
+        return jsonify({'message': f'Inteval {id} has been deleted with success!'}), 200
     except:
-        return jsonify({'error': 'An error occured related to database...'})
+        return jsonify({'error': 'An error occured related to database...'}), 500

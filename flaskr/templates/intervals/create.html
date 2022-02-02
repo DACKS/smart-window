@@ -16,8 +16,21 @@
     <input type="datetime-local" name="iEnd" id="iEnd" value="{{ request.form['iEnd'] }}" required>
 
     <label for="luminosity">luminosity: </label>
-    <input type="number" name="luminosity" step="0.01" id="luminosity" value="{{ request.form['luminosity'] }}">
+    <input type="number" name="luminosity" step="1" min="0" max="100" id="luminosity" value="{{ request.form['luminosity'] }}">
 
     <input type="submit" value="Save">
   </form>
+  <script>
+    var start = document.getElementById('iStart');
+    var end = document.getElementById('iEnd');
+
+    start.addEventListener('change', function() {
+      if (start.value)
+        end.min = start.value;
+    }, false);
+    end.addEventLiseter('change', function() {
+      if (end.value)
+        start.max = end.value;
+    }, false);
+  </script>
 {% endblock %}

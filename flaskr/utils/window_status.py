@@ -5,20 +5,23 @@ import math
 import random
 from re import S
 import requests
-from flaskr.singleton_meta import SingletonMeta
-from flaskr.status_api import StatusApi
+from flaskr.utils.singleton_meta import SingletonMeta
+from flaskr.utils.status_api import StatusApi
 from flaskr import db
 
-from .storage.window_data import WindowData
+from flaskr.storage.window_data import WindowData
 window = WindowData()
 
-window_update_interval = 0.1
+window_time_open = 2.0
+window_update_interval = 1.0
 outside_stats_update_interval = 60.0
 inside_stats_update_interval = 10.0
 notifications_update_interval = 10.0
+window_data_update_interval = 60.0
 
 window_break_chance = 0.00001
 humidity_threshold = 30
+leave_come_chance = 0.5
 
 class CurrentStatistics:
 
@@ -27,16 +30,22 @@ class CurrentStatistics:
         self.pressure = 0
         self.humidity = 0
 
-
 class WindowStatus(metaclass=SingletonMeta):
     
     def __init__(self):
         self.accumulated_outside_update_time = 0.0
         self.accumulated_inside_update_time = 0.0
         self.accumulated_notifications_update_time = 0.0
+        self.accumulated_window_data_update_time = 0.0
 
         self.current_outside_stats = CurrentStatistics()
         self.current_inside_stats = CurrentStatistics()
+        self.luminosity = WindowData().luminosity
+
+        self.isday = False
+        self.openAngle = 0.0
+        self.isLeave = True
+        self.timeEmplyHouse = datetime.datetime.now()
 
         self.app = None
 
@@ -47,6 +56,7 @@ class WindowStatus(metaclass=SingletonMeta):
         self.update_outside_stats()
         self.update_inside_stats()
         self.update_notifications()
+        self.update_window_data()
 
     def update_outside_stats(self):
         self.accumulated_outside_update_time += window_update_interval
@@ -135,7 +145,7 @@ class WindowStatus(metaclass=SingletonMeta):
                 pressure = stats_object.pressure
 
                 my_db.execute(f"UPDATE swStatistics SET minTemperature = {minTemperature}, maxTemperature = {maxTemperature}, humidity={humidity}, pressure={pressure} WHERE DATE('now')=DATE(createdAt) and isExterior={isExteriorBit}")
-
+            
             my_db.commit()
 
 
@@ -148,6 +158,23 @@ class WindowStatus(metaclass=SingletonMeta):
     
     def too_high_humidity(self):
         if self.current_inside_stats.humidity > humidity_threshold:
+            return True
+        return False
+
+    def leave_or_come_home(self):
+        chance = random.random()
+
+        if chance < leave_come_chance:
+            return True
+
+
+        return False
+
+    def close_window(self):
+
+        if (window.openAngle > 0 and self.isLeave and (datetime.datetime.now()-self.timeEmplyHouse).seconds//60 >= window_time_open):
+            window.update_window_data(openAngle=0)
+
             return True
         return False
 
@@ -172,6 +199,22 @@ class WindowStatus(metaclass=SingletonMeta):
             notif_type = 1
             notification_content += humidity_check
 
+        if self.close_window():
+            notif_type = 4
+            notification_content += "The window closed automatically."
+
+
+        if self.leave_or_come_home():
+            if self.isLeave is False :
+                notif_type = 2
+                notification_content += "The owner leave the house."
+                self.isLeave = True
+                self.timeEmplyHouse =  datetime.datetime.now()
+
+            else:
+                notif_type = 3
+                self.isLeave = False
+                self.timeEmplyHouse = datetime.datetime.now()
 
         if notif_type == -1:
             return
@@ -187,3 +230,22 @@ class WindowStatus(metaclass=SingletonMeta):
 
                 my_db.execute(f"INSERT INTO swNotification (content, typeID, createdAt) VALUES ('{notification_content}', {notif_type}, CURRENT_TIMESTAMP)")
                 my_db.commit()
+
+    def update_window_data(self):
+    
+        
+        self.accumulated_window_data_update_time += window_update_interval
+        if self.accumulated_window_data_update_time < window_data_update_interval:
+            return
+
+        self.accumulated_window_data_update_time -= window_data_update_interval
+
+        StatusApi().publish_window_data()
+
+        if self.luminosity != WindowData().luminosity:
+            self.luminosity = WindowData().luminosity
+            notification_content =f"Window luminosity is set to {self.luminosity}"
+            StatusApi().publish_notification(notification_content)
+        
+
+
