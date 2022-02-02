@@ -55,10 +55,20 @@ or this one:
 pytest ./tests
 ```
 
+# Documentation
 
+[Task analysis document](https://github.com/DACKS/smart-window/blob/main/Document_de_analiza_a_cerintelor_clientului.docx)
 
-Install AsyncAPI
-```npm install -g @asyncapi/generator```
+[How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.docx)
 
-Generate AsyncAPI documentation
-```ag window.yml @asyncapi/html-template -o output```
+For the HTTP endpoints documentation, you need to run the application, and access ```http://127.0.0.1:5000/api/docs```
+
+We used AsyncAPI for the MQTT documentation. If you don't have AsyncAPI, you can install it by running the following command:
+```
+npm install -g @asyncapi/generator
+```
+
+The command used for generating an AsyncAPI documentation:
+```
+ag window.yml @asyncapi/html-template -o output
+```
