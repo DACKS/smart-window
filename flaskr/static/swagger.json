@@ -54,11 +54,21 @@
             "application/json"
           ],
           "responses": {
-            "200": {
-              "description": "OK",
+            "201": {
+              "description": "Register successful",
               "schema": {
                 "$ref": "#/components/schemas/messageErrorOutput"
-              }
+              }},
+              "400": {
+                "description": "Error: the username or the password is missing",
+                "schema": {
+                  "$ref": "#/components/schemas/messageErrorOutput"
+                }},
+                "403": {
+                  "description": "User already registered",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
             }
           }
         }
@@ -87,17 +97,31 @@
             ],
             "responses": {
                 "200": {
-                "description": "OK",
+                "description": "Login successful",
                 "schema": {
                   "$ref": "#/components/schemas/messageErrorOutput"
                 }
-                }
+                },
+
+                "400": {
+                  "description": "Error: the username or the password is missing",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  },
+
+                  "403": {
+                    "description": "Incorrect password or username",
+                    "schema": {
+                      "$ref": "#/components/schemas/messageErrorOutput"
+                    }
+                    }
             }
             }
         },
 
         "/api/auth/logout": {
-            "get": {
+            "post": {
             "tags": [
                 "Authentification Request"
             ],
@@ -130,7 +154,14 @@
                 "schema": {
                   "$ref": "#/components/schemas/messageErrorOutput"
                 }
-                }
+                },
+
+                "500": {
+                  "description": "An error occured related to database",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  }
             }
             }
         },
@@ -156,12 +187,19 @@
                 "application/json"
             ],
             "responses": {
-                "200": {
-                "description": "OK",
+                "201": {
+                "description": "Interval has been created with success",
                 "schema": {
                   "$ref": "#/components/schemas/messageErrorOutput"
                 }
-                }
+                },
+
+                "400": {
+                  "description": "Invalid payload",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  }
             }
             }
         },
@@ -201,7 +239,22 @@
                   "schema": {
                     "$ref": "#/components/schemas/messageErrorOutput"
                   }
-                  }
+                  },
+
+                  "400": {
+                    "description": "Invalid payload",
+                    "schema": {
+                      "$ref": "#/components/schemas/messageErrorOutput"
+                    }
+                    },
+
+                    "500": {
+                      "description": "An error occured related to database",
+                      "schema": {
+                        "$ref": "#/components/schemas/messageErrorOutput"
+                      }
+                      }
+
               }
             }
         },
@@ -230,7 +283,21 @@
                 "schema": {
                   "$ref": "#/components/schemas/messageErrorOutput"
                 }
-                }
+                },
+
+                "400": {
+                  "description": "There is no interval with the specified ID",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  },
+
+                  "500": {
+                    "description": "An error occured related to database",
+                    "schema": {
+                      "$ref": "#/components/schemas/messageErrorOutput"
+                    }
+                    }
             }
             }
         },
@@ -250,7 +317,14 @@
                 "schema": {
                   "$ref": "#/components/schemas/messageErrorOutput"
                 }
-                }
+                },
+                
+                "500": {
+                  "description": "An error occured related to database",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  }
+                  }
             }
             }
         },
@@ -320,6 +394,13 @@
                   "schema": {
                     "$ref": "#/components/schemas/messageErrorOutput"
                   }
+                },
+
+                "400": {
+                  "description": "Invalid payload",
+                  "schema": {
+                    "$ref": "#/components/schemas/messageErrorOutput"
+                  },
                 }
               }
           }
