@@ -61,6 +61,8 @@ pytest ./tests
 
 [How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.docx)
 
+[Database diagram](https://github.com/DACKS/smart-window/blob/main/dbdiagram.pdf)
+
 For the HTTP endpoints documentation, you need to run the application, and access ```http://127.0.0.1:5000/api/docs```
 
 We used AsyncAPI for the MQTT documentation. If you don't have AsyncAPI, you can install it by running the following command:
