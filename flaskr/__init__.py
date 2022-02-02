@@ -31,7 +31,8 @@ def create_app(testing=False, db_path=None):
         MQTT_USERNAME='',
         MQTT_PASSWORD='',
         MQTT_KEEPALIVE=5,
-        MQTT_TLS_ENABLED = False
+        MQTT_TLS_ENABLED = False,
+        SCHEDULER_TIMEZONE = "Europe/Bucharest"
     )
 
     mqtt = Mqtt()

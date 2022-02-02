@@ -53,12 +53,12 @@ mosquitto
 If it's the first time you run the application, you would need to initialize the database. 
 You can use this command whenever you want to reset to an empty database.
 ```
-python3 -m init-db
+python3 -m flask init-db
 ```
 
 To start the application, simply use this command in a terminal.
 ```
-python3 -m run
+python3 -m flask run
 ```
 
 # Testing the application
@@ -67,7 +67,7 @@ We used [pytest](https://docs.pytest.org/) for unit testing and integration test
 
 Use this command to run the rests:
 ```
-python -m pytest ./tests
+python3 -m pytest ./tests
 ```
 or this one:
 ```
@@ -76,9 +76,9 @@ pytest ./tests
 
 # Documentation
 
-[Task analysis document](https://github.com/DACKS/smart-window/blob/main/Document_de_analiza_a_cerintelor_clientului.pdf)
+[Task analysis document](https://github.com/DACKS/smart-window/blob/main/Document_de_analiza_a_cerintelor_clientului.docx)
 
-[How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.pdf)
+[How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.docx)
 
 [Database diagram](https://github.com/DACKS/smart-window/blob/main/dbdiagram.pdf)
 

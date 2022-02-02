@@ -35,7 +35,7 @@ def app():
 def client(app):
     return app.test_client()
 
-@pytest.mark.integtest
+
 def test_integration(app, client):
     with app.app_context():
 
