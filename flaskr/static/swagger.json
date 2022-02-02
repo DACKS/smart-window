@@ -456,7 +456,7 @@
             },
             "luminosity": {
                 "type": "double",
-                "example":100.0
+                "example":10.0
             }
           }
         },
