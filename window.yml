@@ -16,6 +16,10 @@ channels:
     publish:
       message:
         $ref: '#/components/messages/notification_types'
+  smart_window/window_data:
+    publish:
+      message:
+        $ref: '#/components/messages/window_data'
 components:
   messages:
     weather_stats:
@@ -31,6 +35,27 @@ components:
           humidity:
             type: number
             description: The humidity
+
+    window_data:
+      payload:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the window
+          openDirection:
+            type: string
+            description: The direction in which the window opens
+          openAngle:
+            type: number
+            description: The angle of the window when it opens
+          integrity:
+            type: number
+            description: The integrity of the window (a number between 0 and 100)
+          luminosiry:
+            type: number
+            description: the current lumnosity that the window allows
+
     notification_types:
       payload:
         type: string

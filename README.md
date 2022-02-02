@@ -76,9 +76,9 @@ pytest ./tests
 
 # Documentation
 
-[Task analysis document](https://github.com/DACKS/smart-window/blob/main/Document_de_analiza_a_cerintelor_clientului.docx)
+[Task analysis document](https://github.com/DACKS/smart-window/blob/main/Document_de_analiza_a_cerintelor_clientului.pdf)
 
-[How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.docx)
+[How to use the application](https://github.com/DACKS/smart-window/blob/main/Document_utilizare_aplica%C8%9Bie.pdf)
 
 [Database diagram](https://github.com/DACKS/smart-window/blob/main/dbdiagram.pdf)
 

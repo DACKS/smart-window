@@ -70,7 +70,7 @@ def test_window_data(app):
         window_data.alter_file_path(os.path.join(os.path.dirname(__file__), 'testing.json'))
         window_data.reload_json()
 
-        for direction in range(0, 3):
+        for direction in {'left', 'right', 'fold'}:
             for angle in range(10, 90, 5):
                 name = 'cool window'
                 integrity = 100
