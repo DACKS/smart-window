@@ -2,10 +2,29 @@
 
 # Installation
 
+Prior to installation, you should have ```python 3``` and ```pip``` installed.
+
 ```
-pip install flask
-pip install flask_mqtt flask_socketio eventlet APScheduler flask_apscheduler requests pytest flask_swagger flask_swagger_ui
+python3 -m pip install --user virtualenv
+python3 -m venv venv
 ```
+
+### Activate virtual environment
+MacOS/Linux
+```
+source venv/bin/activate
+```
+
+Windows
+```
+.\venv\Scripts\activate
+```
+
+### Install required packages
+```
+python3 -m pip install -r requirements.txt
+```
+
 
 Set environment variables for development:
 
@@ -34,12 +53,12 @@ mosquitto
 If it's the first time you run the application, you would need to initialize the database. 
 You can use this command whenever you want to reset to an empty database.
 ```
-flask init-db
+python3 -m init-db
 ```
 
 To start the application, simply use this command in a terminal.
 ```
-flask run
+python3 -m run
 ```
 
 # Testing the application
