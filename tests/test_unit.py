@@ -239,7 +239,7 @@ def test_intervals_update(client):
         'iEnd':'2022-01-04 11:10:00',
         'luminosity':1.0}
 
-    response = client.post(f'/api/intervals/{id}/update', json=payload)
+    response = client.put(f'/api/intervals/{id}/update', json=payload)
     assert response.status_code == 200
 
     assert response.json != None
@@ -255,7 +255,7 @@ def test_intervals_delete(client):
 
     authorize(client)
 
-    response = client.get(f'/api/intervals/{id}/delete')
+    response = client.delete(f'/api/intervals/{id}/delete')
     assert response.status_code == 200
 
     assert response.json != None
@@ -285,5 +285,5 @@ def test_window_update(client):
         'openAngle': 10.2
     }
 
-    response = client.post('/api/window/update', json=payload)
+    response = client.put('/api/window/update', json=payload)
     assert response.status_code == 200

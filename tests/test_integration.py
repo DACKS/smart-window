@@ -40,8 +40,8 @@ def test_integration(app, client):
     with app.app_context():
 
         # Register
-        response = client.post('api/auth/register', json={'username': 'test_username', 'password': 'test_password'})
-        assert response.status_code == 201 or response.status_code == 403 
+        response = client.post('api/auth/register', json={'username': 'test_username_1', 'password': 'test_password_1'})
+        assert response.status_code == 201
 
         # Login
         response = client.post('api/auth/login', json={'username': 'test_username', 'password': 'test_password'})
@@ -65,7 +65,7 @@ def test_integration(app, client):
             'openDirection': 'left',
             'openAngle': 10.2
         }
-        response = client.post('api/window/update', json=test_window)
+        response = client.put('api/window/update', json=test_window)
         assert response.status_code == 200
 
         # Get intervals
@@ -85,11 +85,11 @@ def test_integration(app, client):
         # Update an interval
         response = client.get('api/intervals/')
         id = json.loads(response.data)[0]['id']
-        response = client.post(f'api/intervals/{id}/update', json=test_interval)
+        response = client.put(f'api/intervals/{id}/update', json=test_interval)
         assert response.status_code == 200
 
         # Delete an interval
-        response = client.get(f'api/intervals/{id}/delete')
+        response = client.delete(f'api/intervals/{id}/delete')
         assert response.status_code == 200
 
         # Logout

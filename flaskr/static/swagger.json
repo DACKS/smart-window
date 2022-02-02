@@ -214,7 +214,7 @@
                   "type": "integer"
                 }
               ],
-            "post": {
+            "put": {
               "tags": [
                   "Interval Request"
               ],
@@ -269,7 +269,7 @@
                   "type": "integer"
                 }
               ],
-            "get": {
+            "delete": {
             "tags": [
                 "Interval Request"
             ],
@@ -369,7 +369,7 @@
             }
         },
         "/api/window/update": {
-          "post": {
+          "put": {
             "tags": [
               "Window Request"
             ],

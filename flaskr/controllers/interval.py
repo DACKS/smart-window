@@ -167,7 +167,7 @@ def update(id):
             return redirect(url_for('intervals.index'))
 
 
-@bp_api.route('/<int:id>/update', methods=('POST',))
+@bp_api.route('/<int:id>/update', methods=('PUT',))
 @auth.login_required
 def api_update(id):
     interval = get_interval(id, from_api=True)
@@ -227,7 +227,7 @@ def delete(id):
     my_db.commit()
     return redirect(url_for('intervals.index'))
 
-@bp_api.route('/<int:id>/delete', methods=('GET',))
+@bp_api.route('/<int:id>/delete', methods=('DELETE',))
 @auth.login_required
 def api_delete(id):
     interval = get_interval(id, from_api=True)

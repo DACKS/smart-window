@@ -47,7 +47,7 @@ def update():
 
     return render_template('window/update.html')
 
-@bp_api.route('/update', methods=( 'POST', ))
+@bp_api.route('/update', methods=( 'PUT', ))
 @auth.login_required
 def api_update():
 
